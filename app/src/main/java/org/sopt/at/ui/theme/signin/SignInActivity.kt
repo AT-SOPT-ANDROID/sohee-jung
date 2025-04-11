@@ -81,6 +81,7 @@ fun SignIn() {
     val snackbarHostState = remember { SnackbarHostState() }
     // for textfield
     var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -156,7 +157,10 @@ fun SignIn() {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 // show-hide password TextField
-                ShowHidePasswordTextField()
+                ShowHidePasswordTextField(
+                    password = password,
+                    onPasswordChange = {password = it}
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 

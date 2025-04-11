@@ -113,7 +113,11 @@ fun SignUpPassword() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                ShowHidePasswordTextField()
+                ShowHidePasswordTextField(
+                    password = password,
+                    onPasswordChange = {password = it}
+                )
+                
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(

@@ -26,8 +26,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ShowHidePasswordTextField(){
-    var password by remember { mutableStateOf("") }
+fun ShowHidePasswordTextField(
+    password: String,
+    onPasswordChange: (String) -> Unit
+){
     var showPassword by remember { mutableStateOf(false) }
 
     TextField(
@@ -36,7 +38,7 @@ fun ShowHidePasswordTextField(){
             .padding(horizontal = 20.dp)
             .height(55.dp),
         value = password,
-        onValueChange = {password = it},
+        onValueChange = {onPasswordChange(it)},
         placeholder = {
             Text(text = "비밀번호")
         },
