@@ -20,11 +20,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,7 +30,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -47,9 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,6 +54,7 @@ import org.sopt.at.ui.theme.GrayEdit
 import org.sopt.at.ui.theme.GrayEditText
 import org.sopt.at.ui.theme.GrayHintText
 import org.sopt.at.ui.theme.GrayText
+import org.sopt.at.ui.theme.ShowHidePasswordTextField
 import org.sopt.at.ui.theme.signup.SignUpIdActivity
 
 class SignInActivity : ComponentActivity() {
@@ -252,61 +246,6 @@ fun SignIn() {
                 }
             }
     }
-}
-
-
-@Composable
-fun ShowHidePasswordTextField(){
-    var password by remember { mutableStateOf("") }
-    var showPassword by remember { mutableStateOf(false) }
-
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .height(55.dp),
-        value = password,
-        onValueChange = {password = it},
-        placeholder = {
-            Text(text = "비밀번호")
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(5.dp),
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = GrayHintText,
-            unfocusedTextColor = GrayHintText,
-            focusedPlaceholderColor = GrayHintText,
-            unfocusedPlaceholderColor = GrayHintText,
-            focusedContainerColor = GrayEdit,
-            unfocusedContainerColor = GrayEdit,
-            // 하단 밑줄 사라지게
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        ),
-        visualTransformation = if (showPassword){
-            VisualTransformation.None
-        } else{
-            PasswordVisualTransformation()
-        },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-            if (showPassword){
-                IconButton(onClick = {showPassword = false}) {
-                    Icon(
-                        imageVector = Icons.Filled.Visibility,
-                        contentDescription = "hide_password"
-                    )
-                }
-            } else {
-                IconButton(onClick = {showPassword = true}) {
-                    Icon(
-                        imageVector = Icons.Filled.VisibilityOff,
-                        contentDescription = "hide_password"
-                    )
-                }
-            }
-        }
-    )
 }
 
 @Preview
