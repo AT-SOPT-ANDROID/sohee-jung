@@ -131,7 +131,7 @@ fun SignIn() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(color = Color.Black),
+                .background(color = Color.Black)
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 

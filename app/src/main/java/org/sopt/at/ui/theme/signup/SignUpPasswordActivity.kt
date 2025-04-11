@@ -70,7 +70,7 @@ fun SignUpPassword() {
     val scope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
     var password by remember { mutableStateOf("") }
-    var id = remember {
+    val id = remember {
         (context as? Activity)?.intent?.getStringExtra("id") ?: ""
     }
 
@@ -165,7 +165,7 @@ fun SignUpPassword() {
                     .padding(horizontal = 20.dp),
                 shape = RoundedCornerShape(5.dp),
                 colors = ButtonDefaults.buttonColors(Color.Black),
-                border = BorderStroke(2.dp, GrayButtonLine)
+                border = BorderStroke(1.dp, GrayButtonLine)
             ) {
                 Text(
                     text = "다음"
