@@ -1,5 +1,6 @@
 package org.sopt.at.ui.theme.signup
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,10 +11,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -66,7 +70,9 @@ fun SignUpPassword() {
     val scope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
     var password by remember { mutableStateOf("") }
-    var showPassword by remember { mutableStateOf("") }
+    var id = remember {
+        (context as? Activity)?.intent?.getStringExtra("id") ?: ""
+    }
 
     Scaffold(
         topBar = {
@@ -74,13 +80,11 @@ fun SignUpPassword() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Black)
+                    .padding(WindowInsets.statusBars.asPaddingValues())
                     .padding(start = 6.dp, top = 6.dp)
             ) {
                 IconButton(onClick = {
-                    val intent = Intent(context, SignUpIdActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                    context.startActivity(intent)
+                    (context as Activity).finish()
                 }) {
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowLeft,
@@ -146,10 +150,14 @@ fun SignUpPassword() {
                             snackbarHostState.showSnackbar(errorMessage)
                         }
                     } else {
-                        val intent = Intent(context, SignInActivity()::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        val intent = Intent().apply {
+                            putExtra("id", id)
+                            putExtra("password", password)
                         }
-                        context.startActivity(intent)
+                        (context as Activity).apply {
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        }
                     }
                 },
                 modifier = Modifier

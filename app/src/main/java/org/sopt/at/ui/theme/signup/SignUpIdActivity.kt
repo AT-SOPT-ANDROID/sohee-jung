@@ -1,19 +1,25 @@
 package org.sopt.at.ui.theme.signup
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -74,19 +80,33 @@ fun SignUpId() {
     val snackbarHostState = remember { SnackbarHostState() }
     var id by remember { mutableStateOf("") }
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val id = result.data?.getStringExtra("id") ?: ""
+            val password = result.data?.getStringExtra("password") ?: ""
+
+            val intent = Intent().apply {
+                putExtra("id", id)
+                putExtra("password", password)
+            }
+            (context as Activity).setResult(Activity.RESULT_OK, intent)
+            (context as Activity).finish()
+        }
+    }
+
     Scaffold(
         topBar = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Black)
+                    .padding(WindowInsets.statusBars.asPaddingValues())
                     .padding(start = 6.dp, top = 6.dp)
             ) {
                 IconButton(onClick = {
-                    val intent = Intent(context, SignInActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                    context.startActivity(intent)
+                    (context as Activity).finish()
                 }) {
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowLeft,
@@ -162,7 +182,9 @@ fun SignUpId() {
                     val errorMessage = when {
                         id.length < 6 -> "아이디는 6자 이상으로 입력해주세요."
                         id.length > 12 -> "아이디는 12자 이하로 입력해주세요."
-                        !id.matches(Regex("^[a-zA-Z0-9]*$")) -> "영문 소문자 또는 영문 대문자, 숫자만 입력해주세요."
+                        !id.matches(Regex("^[a-zA-Z0-9]*$")) -> "아이디는 영문자와 숫자만 입력해주세요."
+                        !id.contains(Regex("[a-zA-Z]")) -> "아이디에 영문자를 최소 한 글자 포함해주세요."
+                        !id.contains(Regex("[0-9]")) -> "아이디에 숫자를 최소 한 글자 포함해주세요."
                         else -> null
                     }
 
@@ -172,10 +194,9 @@ fun SignUpId() {
                         }
                     } else {
                         val intent = Intent(context, SignUpPasswordActivity::class.java).apply {
-                            flags =
-                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            putExtra("id", id)
                         }
-                        context.startActivity(intent)
+                        launcher.launch(intent)
                     }
                 },
                 modifier = Modifier

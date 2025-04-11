@@ -17,3 +17,5 @@ val GrayEdit = Color(0XFF262626)
 val GrayHintText = Color(0xFF767676)
 val GrayText = Color(0xFFb5b5b5)
 val GrayButtonLine = Color(0xFF5a5a5a)
+
+val RedButton = Color(0xFFfe143b)

@@ -1,10 +1,13 @@
 package org.sopt.at.ui.theme.signin
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,6 +58,7 @@ import org.sopt.at.ui.theme.GrayEdit
 import org.sopt.at.ui.theme.GrayEditText
 import org.sopt.at.ui.theme.GrayHintText
 import org.sopt.at.ui.theme.GrayText
+import org.sopt.at.ui.theme.RedButton
 import org.sopt.at.ui.theme.ShowHidePasswordTextField
 import org.sopt.at.ui.theme.signup.SignUpIdActivity
 
@@ -81,8 +85,23 @@ fun SignIn() {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     // for textfield
-    var id by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var registeredId by remember { mutableStateOf("") }
+    var registeredPassword by remember { mutableStateOf("") }
+
+    var inputId by remember { mutableStateOf("") }
+    var inputPassword by remember { mutableStateOf("") }
+
+    val resultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                registeredId = it.getStringExtra("id") ?: ""
+                registeredPassword = it.getStringExtra("password") ?: ""
+            }
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -129,8 +148,8 @@ fun SignIn() {
             Spacer(modifier = Modifier.height(24.dp))
 
             TextField(
-                value = id,
-                onValueChange = { id = it },
+                value = inputId,
+                onValueChange = { inputId = it },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
@@ -159,27 +178,31 @@ fun SignIn() {
 
             // show-hide password TextField
             ShowHidePasswordTextField(
-                password = password,
-                onPasswordChange = { password = it }
+                password = inputPassword,
+                onPasswordChange = { inputPassword = it }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            val isValid = inputId.isNotBlank() && inputPassword.isNotBlank()
+
             Button(
                 onClick = {
-                    if (true) {
+                    val errorMessage = when {
+                        inputId != registeredId && inputPassword == registeredPassword -> "아이디가 틀렸습니다."
+                        inputId == registeredId && inputPassword != registeredPassword -> "비밀번호가 틀렸습니다."
+                        inputId != registeredId && inputPassword != registeredPassword -> "아이디,비밀번호가 모두 틀렸습니다."
+                        else -> null
+                    }
+                    if (errorMessage != null){
+                        scope.launch {
+                            snackbarHostState.showSnackbar(errorMessage)
+                        }
+                    } else{
                         val intent = Intent(context, MyActivity::class.java).apply {
-                            flags =
-                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            putExtra("id", inputId)
                         }
                         context.startActivity(intent)
-                    } else {
-                        scope.launch {
-                            val result = snackbarHostState
-                                .showSnackbar(
-                                    message = ""
-                                )
-                        }
                     }
                 },
                 modifier = Modifier
@@ -187,8 +210,8 @@ fun SignIn() {
                     .height(60.dp)
                     .padding(horizontal = 20.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = GrayButton,
-                    contentColor = GrayHintText
+                    containerColor = if (isValid) RedButton else GrayButton,
+                    contentColor = if(isValid) Color.White else GrayHintText
                 ),
                 shape = RoundedCornerShape(5.dp)
             ) {
@@ -236,11 +259,8 @@ fun SignIn() {
                 Text(text = "회원가입",
                     color = GrayText,
                     modifier = Modifier.noRippleClickable {
-                        val intent = Intent(context, SignUpIdActivity::class.java).apply {
-                            flags =
-                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        }
-                        context.startActivity(intent)
+                        val intent = Intent(context, SignUpIdActivity::class.java)
+                        resultLauncher.launch(intent)
                     }
                 )
             }
