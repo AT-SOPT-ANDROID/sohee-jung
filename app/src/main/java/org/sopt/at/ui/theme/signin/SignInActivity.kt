@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -37,11 +36,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,7 +61,7 @@ import org.sopt.at.ui.theme.GrayEdit
 import org.sopt.at.ui.theme.GrayEditText
 import org.sopt.at.ui.theme.GrayHintText
 import org.sopt.at.ui.theme.GrayText
-import org.sopt.at.ui.theme.signup.SignUpActivity
+import org.sopt.at.ui.theme.signup.SignUpIdActivity
 
 class SignInActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,9 +69,6 @@ class SignInActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ATSOPTANDROIDTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    SignIn()
-//                }
                 ATSOPTANDROIDTheme {
                     SignIn()
                 }
@@ -103,7 +95,7 @@ fun SignIn() {
                     .fillMaxWidth()
                     .background(Color.Black)
                     .padding(WindowInsets.statusBars.asPaddingValues())
-                    .padding(start = 6.dp, top = 6.dp)
+                    .padding(start = 6.dp, top = 6.dp, bottom = 6.dp)
             ){
                 IconButton(onClick = {
                     // 뒤로가기 버튼 눌렀을 때
@@ -120,17 +112,13 @@ fun SignIn() {
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }) { paddingValues ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            color = Color.Black
-        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .background(color = Color.Black),
             ) {
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
                     text = "TVING ID 로그인",
@@ -188,7 +176,10 @@ fun SignIn() {
                             context.startActivity(intent)
                         } else {
                             scope.launch {
-                                snackbarHostState.showSnackbar("Snackbar")
+                                val result = snackbarHostState
+                                    .showSnackbar(
+                                        message = ""
+                                    )
                             }
                         }
                     },
@@ -251,7 +242,7 @@ fun SignIn() {
                         color = GrayText,
                         modifier = Modifier.clickable(
                             onClick = {
-                                val intent = Intent(context, SignUpActivity::class.java).apply {
+                                val intent = Intent(context, SignUpIdActivity::class.java).apply {
                                     flags =
                                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
@@ -260,7 +251,6 @@ fun SignIn() {
                         ))
                 }
             }
-        }
     }
 }
 
