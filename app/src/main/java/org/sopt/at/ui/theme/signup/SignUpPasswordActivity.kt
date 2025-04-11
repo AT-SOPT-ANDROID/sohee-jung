@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,7 +49,6 @@ import org.sopt.at.ui.theme.GrayButtonLine
 import org.sopt.at.ui.theme.GrayEdit
 import org.sopt.at.ui.theme.GrayHintText
 import org.sopt.at.ui.theme.ShowHidePasswordTextField
-import org.sopt.at.ui.theme.signin.SignInActivity
 
 class SignUpPasswordActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +57,7 @@ class SignUpPasswordActivity : ComponentActivity() {
         setContent {
             ATSOPTANDROIDTheme {
                 ATSOPTANDROIDTheme {
-                    SignUpPassword()
+                    SignUpPasswordScreen()
                 }
             }
         }
@@ -65,7 +65,7 @@ class SignUpPasswordActivity : ComponentActivity() {
 }
 
 @Composable
-fun SignUpPassword() {
+fun SignUpPasswordScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
@@ -75,6 +75,9 @@ fun SignUpPassword() {
     }
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {
             Row(
                 modifier = Modifier
@@ -102,6 +105,7 @@ fun SignUpPassword() {
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(Color.Black)
+                .imePadding()
         ) {
             Column(
                 modifier = Modifier
@@ -135,6 +139,8 @@ fun SignUpPassword() {
 
             Spacer(modifier = Modifier.weight(1f))
 
+            val isValid = password.isNotBlank()
+
             Button(
                 onClick = {
                     val errorMessage = when {
@@ -164,7 +170,10 @@ fun SignUpPassword() {
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 shape = RoundedCornerShape(5.dp),
-                colors = ButtonDefaults.buttonColors(Color.Black),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isValid) Color.White else Color.Black,
+                    contentColor = if (isValid) Color.Black else Color.White
+                ),
                 border = BorderStroke(1.dp, GrayButtonLine)
             ) {
                 Text(
@@ -181,5 +190,5 @@ fun SignUpPassword() {
 @Preview
 @Composable
 fun SignUpPasswordPreview() {
-    SignUpPassword()
+    SignUpPasswordScreen()
 }

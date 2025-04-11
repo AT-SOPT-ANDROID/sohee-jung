@@ -18,9 +18,9 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -31,12 +31,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,15 +47,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import kotlinx.coroutines.launch
-import org.sopt.at.ui.common.noRippleClickable
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.GrayButtonLine
 import org.sopt.at.ui.theme.GrayEdit
 import org.sopt.at.ui.theme.GrayEditText
 import org.sopt.at.ui.theme.GrayHintText
-import org.sopt.at.ui.theme.signin.SignInActivity
 
 class SignUpIdActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +61,7 @@ class SignUpIdActivity : ComponentActivity() {
         setContent {
             ATSOPTANDROIDTheme {
                 ATSOPTANDROIDTheme {
-                    SignUpId()
+                    SignUpIdScreen()
                 }
             }
         }
@@ -74,7 +69,7 @@ class SignUpIdActivity : ComponentActivity() {
 }
 
 @Composable
-fun SignUpId() {
+fun SignUpIdScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -97,6 +92,9 @@ fun SignUpId() {
     }
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {
             Row(
                 modifier = Modifier
@@ -124,6 +122,7 @@ fun SignUpId() {
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(Color.Black)
+                .imePadding()
         ) {
             Column(
                 modifier = Modifier
@@ -177,6 +176,8 @@ fun SignUpId() {
 
             Spacer(Modifier.weight(1f))
 
+            val isValid = id.isNotBlank()
+
             Button(
                 onClick = {
                     val errorMessage = when {
@@ -203,7 +204,10 @@ fun SignUpId() {
                     .fillMaxWidth()
                     .height(55.dp)
                     .padding(horizontal = 20.dp),
-                colors = ButtonDefaults.buttonColors(Color.Black),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if(isValid) Color.White else Color.Black,
+                    contentColor = if (isValid) Color.Black else Color.White
+                ),
                 border = BorderStroke(2.dp, GrayButtonLine), // 버튼 stroke 설정
                 shape = RoundedCornerShape(5.dp)
 
@@ -221,5 +225,5 @@ fun SignUpId() {
 @Preview
 @Composable
 fun SignUpIdPreview() {
-    SignUpId()
+    SignUpIdScreen()
 }
