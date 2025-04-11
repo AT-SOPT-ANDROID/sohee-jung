@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import kotlinx.coroutines.launch
+import org.sopt.at.ui.common.noRippleClickable
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.GrayButtonLine
 import org.sopt.at.ui.theme.GrayEdit

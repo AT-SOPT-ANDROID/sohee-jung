@@ -115,9 +115,9 @@ fun SignUpPassword() {
 
                 ShowHidePasswordTextField(
                     password = password,
-                    onPasswordChange = {password = it}
+                    onPasswordChange = { password = it }
                 )
-                
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
@@ -138,19 +138,20 @@ fun SignUpPassword() {
                         password.length > 15 -> "비밀번호는 15자 이하로 입력해주세요."
                         !password.matches(Regex(".*[a-zA-Z0-9].*")) || !password.matches(Regex(".*[!@#^&*()].*"))
                             -> "비밀번호 입력 형식을 맞춰주세요."
+
                         else -> null
                     }
-                    if (errorMessage != null){
+                    if (errorMessage != null) {
                         scope.launch {
                             snackbarHostState.showSnackbar(errorMessage)
                         }
-                    } else{
+                    } else {
                         val intent = Intent(context, SignInActivity()::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }
                         context.startActivity(intent)
                     }
-                          },
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),

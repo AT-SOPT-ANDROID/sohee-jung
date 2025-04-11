@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import org.sopt.at.ui.common.noRippleClickable
 import org.sopt.at.ui.theme.my.MyActivity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.GrayButton
@@ -91,7 +92,7 @@ fun SignIn() {
                     .background(Color.Black)
                     .padding(WindowInsets.statusBars.asPaddingValues())
                     .padding(start = 6.dp, top = 6.dp, bottom = 6.dp)
-            ){
+            ) {
                 IconButton(onClick = {
                     // 뒤로가기 버튼 눌렀을 때
                 }) {
@@ -107,148 +108,143 @@ fun SignIn() {
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }) { paddingValues ->
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(color = Color.Black),
+        ) {
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "TVING ID 로그인",
+                color = Color.White,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .background(color = Color.Black),
+                    .padding(horizontal = 20.dp),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            TextField(
+                value = id,
+                onValueChange = { id = it },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .height(55.dp),
+                placeholder = {
+                    Text(
+                        text = "아이디"
+                    )
+                },
+                singleLine = true, // TextField에서 한줄만 표시하도록 하는 설정
+                shape = RoundedCornerShape(5.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = GrayHintText,
+                    unfocusedTextColor = GrayHintText,
+                    focusedPlaceholderColor = GrayHintText,
+                    unfocusedPlaceholderColor = GrayHintText,
+                    focusedContainerColor = GrayEdit,
+                    unfocusedContainerColor = GrayEdit,
+                    // 하단 밑줄 사라지게
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // show-hide password TextField
+            ShowHidePasswordTextField(
+                password = password,
+                onPasswordChange = { password = it }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    if (true) {
+                        val intent = Intent(context, MyActivity::class.java).apply {
+                            flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        context.startActivity(intent)
+                    } else {
+                        scope.launch {
+                            val result = snackbarHostState
+                                .showSnackbar(
+                                    message = ""
+                                )
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth() // fillMaxWidth()를 사용하고 있는 가운데 정렬 필요 없음
+                    .height(60.dp)
+                    .padding(horizontal = 20.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = GrayButton,
+                    contentColor = GrayHintText
+                ),
+                shape = RoundedCornerShape(5.dp)
             ) {
-                Spacer(modifier = Modifier.height(20.dp))
+                Text("로그인하기")
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(text = "아이디 찾기",
+                    color = GrayText,
+                    modifier = Modifier.noRippleClickable {
+                        // 아이디 찾기 화면
+                    })
+
+                Spacer(modifier = Modifier.width(15.dp))
 
                 Text(
-                    text = "TVING ID 로그인",
-                    color = Color.White,
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-
+                    text = "|",
+                    color = GrayText
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.width(15.dp))
 
-                TextField(
-                    value = id,
-                    onValueChange = { id = it },
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth()
-                        .height(55.dp),
-                    placeholder = {
-                        Text(
-                            text = "아이디"
-                        )
-                    },
-                    singleLine = true, // TextField에서 한줄만 표시하도록 하는 설정
-                    shape = RoundedCornerShape(5.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = GrayHintText,
-                        unfocusedTextColor = GrayHintText,
-                        focusedPlaceholderColor = GrayHintText,
-                        unfocusedPlaceholderColor = GrayHintText,
-                        focusedContainerColor = GrayEdit,
-                        unfocusedContainerColor = GrayEdit,
-                        // 하단 밑줄 사라지게
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    )
+                Text(
+                    text = "비밀번호 찾기",
+                    color = GrayText,
+                    modifier = Modifier.noRippleClickable {
+                        // 비밀번호 찾기 화면
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.width(15.dp))
 
-                // show-hide password TextField
-                ShowHidePasswordTextField(
-                    password = password,
-                    onPasswordChange = {password = it}
+                Text(
+                    text = "|",
+                    color = GrayText
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.width(15.dp))
 
-                Button(
-                    onClick = {
-                        if (true) {
-                            val intent = Intent(context, MyActivity::class.java).apply {
-                                flags =
-                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            }
-                            context.startActivity(intent)
-                        } else {
-                            scope.launch {
-                                val result = snackbarHostState
-                                    .showSnackbar(
-                                        message = ""
-                                    )
-                            }
+                Text(text = "회원가입",
+                    color = GrayText,
+                    modifier = Modifier.noRippleClickable {
+                        val intent = Intent(context, SignUpIdActivity::class.java).apply {
+                            flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth() // fillMaxWidth()를 사용하고 있는 가운데 정렬 필요 없음
-                        .height(60.dp)
-                        .padding(horizontal = 20.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = GrayButton,
-                        contentColor = GrayHintText
-                    ),
-                    shape = RoundedCornerShape(5.dp)
-                ) {
-                    Text("로그인하기")
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(text = "아이디 찾기",
-                        color = GrayText,
-                        modifier = Modifier.clickable(
-                            onClick = {
-                                // 아이디 찾기 화면
-                            }
-                        ))
-
-                    Spacer(modifier = Modifier.width(15.dp))
-
-                    Text(
-                        text = "|",
-                        color = GrayText
-                    )
-
-                    Spacer(modifier = Modifier.width(15.dp))
-
-                    Text(
-                        text = "비밀번호 찾기",
-                        color = GrayText,
-                        modifier = Modifier.clickable(
-                            onClick = {
-                                // 비밀번호 찾기 화면
-                            }
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.width(15.dp))
-
-                    Text(
-                        text = "|",
-                        color = GrayText
-                    )
-
-                    Spacer(modifier = Modifier.width(15.dp))
-
-                    Text(text = "회원가입",
-                        color = GrayText,
-                        modifier = Modifier.clickable(
-                            onClick = {
-                                val intent = Intent(context, SignUpIdActivity::class.java).apply {
-                                    flags =
-                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
-                                context.startActivity(intent)
-                            }
-                        ))
-                }
+                        context.startActivity(intent)
+                    }
+                )
             }
+        }
     }
 }
 
