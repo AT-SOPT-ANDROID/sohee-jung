@@ -1,4 +1,4 @@
-package org.sopt.at.ui.theme.signin
+package org.sopt.at.presentation.signin
 
 import android.app.Activity
 import android.content.Intent
@@ -55,17 +55,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import org.sopt.at.ui.common.noRippleClickable
-import org.sopt.at.ui.theme.my.MyActivity
+import org.sopt.at.common.noRippleClickable
+import org.sopt.at.presentation.my.MyActivity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.GrayButton
 import org.sopt.at.ui.theme.GrayEdit
-import org.sopt.at.ui.theme.GrayEditText
 import org.sopt.at.ui.theme.GrayHintText
 import org.sopt.at.ui.theme.GrayText
 import org.sopt.at.ui.theme.RedButton
-import org.sopt.at.ui.theme.ShowHidePasswordTextField
-import org.sopt.at.ui.theme.signup.SignUpIdActivity
+import org.sopt.at.component.ShowHidePasswordTextField
+import org.sopt.at.presentation.signup.SignUpIdActivity
 
 class SignInActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

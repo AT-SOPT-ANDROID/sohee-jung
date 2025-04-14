@@ -1,4 +1,4 @@
-package org.sopt.at.ui.theme.my
+package org.sopt.at.presentation.my
 
 import android.app.Activity
 import android.content.Intent
@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.GrayButtonLine
-import org.sopt.at.ui.theme.signin.SignInActivity
+import org.sopt.at.presentation.signin.SignInActivity
 
 class MyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

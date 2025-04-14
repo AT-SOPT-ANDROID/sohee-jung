@@ -1,11 +1,13 @@
-package org.sopt.at.ui.theme.signup
+package org.sopt.at.presentation.signup
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -30,6 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,17 +51,17 @@ import kotlinx.coroutines.launch
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.GrayButtonLine
 import org.sopt.at.ui.theme.GrayEdit
+import org.sopt.at.ui.theme.GrayEditText
 import org.sopt.at.ui.theme.GrayHintText
-import org.sopt.at.ui.theme.ShowHidePasswordTextField
 
-class SignUpPasswordActivity : ComponentActivity() {
+class SignUpIdActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ATSOPTANDROIDTheme {
                 ATSOPTANDROIDTheme {
-                    SignUpPasswordScreen()
+                    SignUpIdScreen()
                 }
             }
         }
@@ -65,13 +69,26 @@ class SignUpPasswordActivity : ComponentActivity() {
 }
 
 @Composable
-fun SignUpPasswordScreen() {
+fun SignUpIdScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val snackbarHostState = SnackbarHostState()
-    var password by remember { mutableStateOf("") }
-    val id = remember {
-        (context as? Activity)?.intent?.getStringExtra("id") ?: ""
+    val snackbarHostState = remember { SnackbarHostState() }
+    var id by remember { mutableStateOf("") }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val id = result.data?.getStringExtra("id") ?: ""
+            val password = result.data?.getStringExtra("password") ?: ""
+
+            val intent = Intent().apply {
+                putExtra("id", id)
+                putExtra("password", password)
+            }
+            (context as Activity).setResult(Activity.RESULT_OK, intent)
+            (context as Activity).finish()
+        }
     }
 
     Scaffold(
@@ -112,7 +129,7 @@ fun SignUpPasswordScreen() {
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "비밀번호를 입력해주세요.",
+                    text = "아이디를 입력해주세요.",
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
                     fontSize = 20.sp,
@@ -121,74 +138,92 @@ fun SignUpPasswordScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                ShowHidePasswordTextField(
-                    password = password,
-                    onPasswordChange = { password = it }
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(55.dp),
+                    value = id,
+                    onValueChange = {
+                        id = it
+                    },
+                    placeholder = {
+                        Text(text = "아이디")
+                    },
+                    singleLine = true,
+                    shape = RoundedCornerShape(5.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = GrayHintText,
+                        unfocusedTextColor = GrayHintText,
+                        focusedPlaceholderColor = GrayHintText,
+                        unfocusedPlaceholderColor = GrayHintText,
+                        focusedContainerColor = GrayEdit,
+                        unfocusedContainerColor = GrayEdit,
+                        // 하단 밑줄 사라지게
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "영문, 숫자, 특수문자(~!@#$%^&*) 조합 8~15자리",
+                    text = "영문 소문자 또는 영문 대문자, 숫자 조합 6~12가지",
                     modifier = Modifier
-                        .padding(horizontal = 20.dp),
+                        .padding(20.dp),
                     color = GrayHintText
                 )
-
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(Modifier.weight(1f))
 
-            val isValid = password.isNotBlank()
+            val isValid = id.isNotBlank()
 
             Button(
                 onClick = {
                     val errorMessage = when {
-                        password.length < 8 -> "비밀번호는 8자 이상으로 입력해주세요."
-                        password.length > 15 -> "비밀번호는 15자 이하로 입력해주세요."
-                        !password.matches(Regex(".*[a-zA-Z0-9].*")) || !password.matches(Regex(".*[!@#^&*()].*"))
-                            -> "비밀번호 입력 형식을 맞춰주세요."
-
+                        id.length < 6 -> "아이디는 6자 이상으로 입력해주세요."
+                        id.length > 12 -> "아이디는 12자 이하로 입력해주세요."
+                        !id.matches(Regex("^[a-zA-Z0-9]*$")) -> "아이디는 영문자와 숫자만 입력해주세요."
+                        !id.contains(Regex("[a-zA-Z]")) -> "아이디에 영문자를 최소 한 글자 포함해주세요."
+                        !id.contains(Regex("[0-9]")) -> "아이디에 숫자를 최소 한 글자 포함해주세요."
                         else -> null
                     }
+
                     if (errorMessage != null) {
                         scope.launch {
                             snackbarHostState.showSnackbar(errorMessage)
                         }
                     } else {
-                        val intent = Intent().apply {
+                        val intent = Intent(context, SignUpPasswordActivity::class.java).apply {
                             putExtra("id", id)
-                            putExtra("password", password)
                         }
-                        (context as Activity).apply {
-                            setResult(Activity.RESULT_OK, intent)
-                            finish()
-                        }
+                        launcher.launch(intent)
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(55.dp)
                     .padding(horizontal = 20.dp),
-                shape = RoundedCornerShape(5.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isValid) Color.White else Color.Black,
+                    containerColor = if(isValid) Color.White else Color.Black,
                     contentColor = if (isValid) Color.Black else Color.White
                 ),
-                border = BorderStroke(1.dp, GrayButtonLine)
+                border = BorderStroke(2.dp, GrayButtonLine), // 버튼 stroke 설정
+                shape = RoundedCornerShape(5.dp)
+
             ) {
                 Text(
                     text = "다음"
                 )
             }
+
         }
     }
-
-
 }
 
 
 @Preview
 @Composable
-fun SignUpPasswordPreview() {
-    SignUpPasswordScreen()
+fun SignUpIdPreview() {
+    SignUpIdScreen()
 }

@@ -1,4 +1,4 @@
-package org.sopt.at.ui.theme
+package org.sopt.at.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +24,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import org.sopt.at.ui.theme.GrayEdit
+import org.sopt.at.ui.theme.GrayHintText
 
 @Composable
 fun ShowHidePasswordTextField(
