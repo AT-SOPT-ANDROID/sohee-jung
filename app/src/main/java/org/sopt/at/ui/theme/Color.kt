@@ -9,3 +9,12 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val GrayButton = Color(0xFF404040)
+val GrayEditText = Color(0xFF262626)
+val GrayEdit = Color(0XFF262626)
+val GrayExtraText = Color(0xFF767676)
+val GrayText = Color(0xFFb5b5b5)
+val GrayLine = Color(0xFF5a5a5a)
+
+val RedButton = Color(0xFFfe143b)
