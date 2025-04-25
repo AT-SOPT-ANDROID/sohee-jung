@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 @Composable
-fun AtSoptBasicTopBar(
+fun AtSoptOnBoardingTopBar(
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -39,6 +38,6 @@ fun AtSoptBasicTopBar(
 @Composable
 private fun AtSoptBasicTopBarPreview() {
     ATSOPTANDROIDTheme {
-        AtSoptBasicTopBar(onBackButtonClick = {})
+        AtSoptOnBoardingTopBar(onBackButtonClick = {})
     }
 }

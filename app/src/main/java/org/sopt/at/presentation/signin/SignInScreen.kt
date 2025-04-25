@@ -35,7 +35,7 @@ import org.sopt.at.common.noRippleClickable
 import org.sopt.at.component.AtSoptPasswordTextField
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.textfield.AtSoptTextField
-import org.sopt.at.component.topbar.AtSoptBasicTopBar
+import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.GrayButton
 import org.sopt.at.ui.theme.GrayEdit
@@ -63,7 +63,7 @@ fun SignInScreen(
             .background(color = Color.Black)
             .imePadding()
     ) {
-        AtSoptBasicTopBar(onBackButtonClick = onBackButtonClick)
+        AtSoptOnBoardingTopBar(onBackButtonClick = onBackButtonClick)
 
         Spacer(modifier = Modifier.height(20.dp))
 

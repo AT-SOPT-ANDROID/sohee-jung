@@ -18,3 +18,6 @@ val GrayText = Color(0xFFb5b5b5)
 val GrayLine = Color(0xFF5a5a5a)
 
 val RedButton = Color(0xFFfe143b)
+
+// Tving Long
+val TvingLogo = Color(0xFFFF163D)

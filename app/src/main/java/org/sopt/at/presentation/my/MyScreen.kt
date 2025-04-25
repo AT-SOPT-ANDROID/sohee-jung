@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.sopt.at.component.button.AtSoptButton
-import org.sopt.at.component.topbar.AtSoptBasicTopBar
+import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
 import org.sopt.at.presentation.signin.SignInActivity
 import org.sopt.at.ui.theme.GrayLine
 
@@ -37,7 +37,7 @@ fun MyScreen(
             .padding(20.dp)
             .imePadding()
     ) {
-        AtSoptBasicTopBar(onBackButtonClick = onBackButtonClick)
+        AtSoptOnBoardingTopBar(onBackButtonClick = onBackButtonClick)
 
         Spacer(modifier = Modifier.height(20.dp))
 
