@@ -37,7 +37,6 @@ fun BottomNavigationBar(
     currentTab: MainBottomTab?,
     onTabSelected: (MainBottomTab) -> Unit
 ) {
-
         Row(
             modifier = modifier
                 .fillMaxWidth()

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.serialization.Serializable
 import org.sopt.at.common.noRippleClickable
 import org.sopt.at.component.AtSoptPasswordTextField
 import org.sopt.at.component.button.AtSoptButton
@@ -43,6 +44,8 @@ import org.sopt.at.ui.theme.GrayExtraText
 import org.sopt.at.ui.theme.GrayText
 import org.sopt.at.ui.theme.RedButton
 
+@Serializable
+data object SignInRoute
 
 @Composable
 fun SignInScreen(

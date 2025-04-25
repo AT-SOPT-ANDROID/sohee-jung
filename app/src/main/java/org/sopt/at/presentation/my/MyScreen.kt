@@ -15,10 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.Serializable
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
+import org.sopt.at.navigation.Route
 import org.sopt.at.presentation.signin.SignInActivity
 import org.sopt.at.ui.theme.GrayLine
+
+@Serializable
+data object MyRoute: Route
 
 @Composable
 fun MyScreen(
