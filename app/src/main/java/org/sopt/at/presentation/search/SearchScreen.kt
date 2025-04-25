@@ -2,6 +2,7 @@ package org.sopt.at.presentation.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -15,12 +16,16 @@ import androidx.compose.ui.unit.sp
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(
+    paddingValues: PaddingValues,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(20.dp)
-            .background(Color.Black),
+            .background(Color.Black)
+            .padding(paddingValues)
+            .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -35,6 +40,8 @@ fun SearchScreen() {
 @Composable
 private fun SearchScreenPreview() {
     ATSOPTANDROIDTheme {
-        SearchScreen()
+        SearchScreen(
+            paddingValues = PaddingValues(0.dp)
+        )
     }
 }

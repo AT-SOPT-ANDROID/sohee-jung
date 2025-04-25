@@ -17,8 +17,8 @@ fun NavController.navigateToRecord(navOptions: NavOptions) {
     navigate(RecordRoute, navOptions)
 }
 
-fun NavGraphBuilder.recordNavGraph() {
-    composable<RecordRoute> {
-        RecordScreen()
-    }
-}
+//fun NavGraphBuilder.recordNavGraph() {
+//    composable<RecordRoute> {
+//        RecordScreen()
+//    }
+//}

@@ -28,24 +28,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
-            val navigator = remember { MainBottomNavController(navController) }
-
             ATSOPTANDROIDTheme {
-                Scaffold(
+                MainScreen(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    contentColor = Color.Black,
-                    topBar = {
-                        AtSoptMainTopBar(
-                            myIconClick = {}
-                        )
-
-                    }
-                ) { innerPadding ->
-                    HomeScreen()
-                }
-
+                        .fillMaxSize()
+                        .background(Color.Black)
+                )
             }
         }
     }

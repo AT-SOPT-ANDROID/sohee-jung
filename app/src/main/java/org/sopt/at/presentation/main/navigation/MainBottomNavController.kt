@@ -6,6 +6,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import org.sopt.at.navigation.MainBottomTab
+import org.sopt.at.presentation.home.navigation.HomeRoute
 import org.sopt.at.presentation.home.navigation.navigateToHome
 import org.sopt.at.presentation.live.navigation.navigateToLive
 import org.sopt.at.presentation.record.navigation.navigateToRecord
@@ -19,7 +20,7 @@ class MainBottomNavController(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = "home"
+    val startDestination = HomeRoute
 
     val currentTab: MainBottomTab?
         @Composable get() = MainBottomTab.entries.find { tab ->

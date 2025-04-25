@@ -35,11 +35,15 @@ import org.sopt.at.component.lazylist.HomeBasicSection
 import org.sopt.at.data.contents
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    paddingValues: PaddingValues,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Color.Black)
+            .padding(paddingValues)
     ) {
         item {
             TopBanner(contents)
@@ -159,5 +163,7 @@ fun OnBoarding(contents: List<HomeContentsEntity>) {
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        paddingValues = PaddingValues(0.dp)
+    )
 }

@@ -5,12 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import org.sopt.at.presentation.home.navigation.HomeRoute
-import org.sopt.at.presentation.home.navigation.homeNavGraph
-import org.sopt.at.presentation.live.navigation.liveNavGraph
-import org.sopt.at.presentation.record.navigation.recordNavGraph
-import org.sopt.at.presentation.search.navigation.searchNavGraph
-import org.sopt.at.presentation.shorts.navigation.shortsNavGraph
 
 
 //@Composable

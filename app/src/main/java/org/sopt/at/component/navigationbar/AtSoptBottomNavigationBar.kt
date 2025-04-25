@@ -37,14 +37,7 @@ fun BottomNavigationBar(
     currentTab: MainBottomTab?,
     onTabSelected: (MainBottomTab) -> Unit
 ) {
-    val currentRoute = currentTab?.route
 
-    AnimatedVisibility(
-        //visible =  tabs.map { it.route }.contains(currentRoute),
-        visible = true,
-        enter = fadeIn() + slideInVertically { it },
-        exit = fadeOut() + slideOutVertically { it }
-    ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -60,7 +53,6 @@ fun BottomNavigationBar(
         }
     }
 
-}
 
 @Composable
 private fun RowScope.BottomBarItem(

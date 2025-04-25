@@ -2,6 +2,7 @@ package org.sopt.at.presentation.shorts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -15,12 +16,15 @@ import androidx.compose.ui.unit.sp
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 @Composable
-fun ShortsScreen() {
+fun ShortsScreen(
+    paddingValues: PaddingValues,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(20.dp)
-            .background(Color.Black),
+            .background(Color.Black)
+            .padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -35,6 +39,8 @@ fun ShortsScreen() {
 @Composable
 private fun ShortsScreenPreview() {
     ATSOPTANDROIDTheme {
-        ShortsScreen()
+        ShortsScreen(
+            paddingValues = PaddingValues(0.dp)
+        )
     }
 }

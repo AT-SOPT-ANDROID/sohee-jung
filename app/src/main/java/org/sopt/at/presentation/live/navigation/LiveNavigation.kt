@@ -14,11 +14,11 @@ data object LiveRoute : MainRoute{
 }
 
 fun NavController.navigateToLive(navOptions: NavOptions) {
-    navigate(LiveRoute.route, navOptions)
+    navigate(LiveRoute, navOptions)
 }
 
-fun NavGraphBuilder.liveNavGraph() {
-    composable(LiveRoute.route) {
-        LiveScreen()
-    }
-}
+//fun NavGraphBuilder.liveNavGraph() {
+//    composable(LiveRoute.route) {
+//        LiveScreen()
+//    }
+//}
