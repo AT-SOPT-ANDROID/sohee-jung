@@ -35,15 +35,4 @@ class SignInViewModel : ViewModel() {
         }
     }
 
-    fun estimationError(registeredId: String, registeredPassword: String): String? {
-        val inputId = _uiState.value.id
-        val inputPassword = _uiState.value.password
-
-        return when {
-            inputId != registeredId && inputPassword == registeredPassword -> "아이디가 틀렸습니다."
-            inputId == registeredId && inputPassword != registeredPassword -> "비밀번호가 틀렸습니다."
-            inputId != registeredId && inputPassword != registeredPassword -> "아이디, 비밀번호가 모두 틀렸습니다."
-            else -> null
-        }
-    }
 }

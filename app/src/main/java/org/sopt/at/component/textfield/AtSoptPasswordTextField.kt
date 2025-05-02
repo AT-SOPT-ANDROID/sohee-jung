@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.at.component.textfield.AtSoptTextField
-import org.sopt.at.ui.theme.TvingTheme
+import org.sopt.at.ui.theme.GrayEdit
 
 @Composable
 fun AtSoptPasswordTextField(
@@ -36,9 +36,9 @@ fun AtSoptPasswordTextField(
         value = value,
         placeholder = placeholder,
         onValueChange = onPasswordChange,
-        backgroundColor = TvingTheme.colors.Gray5,
-        backgroundFocusedColor = TvingTheme.colors.Gray5,
-        borderFocusedColor = TvingTheme.colors.BasicWhite,
+        backgroundColor = GrayEdit,
+        backgroundFocusedColor = GrayEdit,
+        borderFocusedColor = Color.White,
         modifier = modifier,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,

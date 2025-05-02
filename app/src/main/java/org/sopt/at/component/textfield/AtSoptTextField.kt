@@ -29,8 +29,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.at.ui.theme.TVINGTheme
-import org.sopt.at.ui.theme.TvingTheme
+import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.at.ui.theme.GrayExtraText
 
 
 @Composable
@@ -78,7 +78,7 @@ fun AtSoptTextField(
         keyboardActions = keyBoardActions,
         visualTransformation = visualTransformation,
         textStyle = TextStyle(
-            color = TvingTheme.colors.BasicWhite,
+            color = Color.White,
             fontSize = 16.sp
         ),
         decorationBox = { innerTextField ->
@@ -96,7 +96,7 @@ fun AtSoptTextField(
                     if (value.isEmpty()) {
                         Text(
                             text = placeholder,
-                            color = TvingTheme.colors.Gray2,
+                            color = GrayExtraText,
                             fontSize = 16.sp
                         )
                     }
@@ -116,14 +116,14 @@ fun AtSoptTextField(
 @Preview(showBackground = true)
 @Composable
 private fun AtSoptTextFieldPreview() {
-    TVINGTheme {
+    ATSOPTANDROIDTheme {
         AtSoptTextField(
             value = "",
             onValueChange = {},
-            borderColor = TvingTheme.colors.BasicBlack,
-            borderFocusedColor = TvingTheme.colors.BasicBlack,
-            backgroundColor = TvingTheme.colors.BasicWhite,
-            backgroundFocusedColor = TvingTheme.colors.BasicBlack,
+            borderColor = Color.Black,
+            borderFocusedColor = Color.Black,
+            backgroundColor = Color.White,
+            backgroundFocusedColor = Color.Black,
             placeholder = "placeholder"
         )
     }

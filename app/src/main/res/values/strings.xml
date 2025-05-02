@@ -11,9 +11,4 @@
     <string name="title_activity_my_screen">MyScreen</string>
     <string name="title_activity_at_sopt_basic_top_bar">AtSoptBasicTopBar</string>
     <string name="title_activity_sign_up_screen">SignUpScreen</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="title_activity_live">LiveActivity</string>
-    <string name="title_activity_record">RecordActivity</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="title_activity_shorts">ShortsActivity</string>
 </resources>

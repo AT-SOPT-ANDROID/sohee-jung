@@ -16,8 +16,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.at.ui.theme.TVINGTheme
-import org.sopt.at.ui.theme.TvingTheme
+import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.at.ui.theme.GrayLine
 
 @Composable
 fun AtSoptButton(
@@ -59,16 +59,16 @@ fun AtSoptButton(
 @Preview(showBackground = true)
 @Composable
 private fun AtSoptButtonPreview() {
-    TVINGTheme {
+    ATSOPTANDROIDTheme {
         AtSoptButton(
             text = "다음",
             onClick = {},
             isValid = true,
-            textColor = TvingTheme.colors.BasicWhite,
-            textConfirmColor = TvingTheme.colors.BasicBlack,
-            borderColor = TvingTheme.colors.Gray3,
+            textColor = Color.White,
+            textConfirmColor = Color.Black,
+            borderColor = GrayLine,
             backgroundColor = Color.Transparent,
-            backgroundConfirmColor = TvingTheme.colors.BasicWhite
+            backgroundConfirmColor = Color.White
         )
     }
 }
