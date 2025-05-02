@@ -12,7 +12,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,10 +47,14 @@ fun SignUpIdRoute(
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
+    val isButtonEnabled by remember {
+        derivedStateOf { uiState.id.isNotEmpty() }
+    }
+
     SignUpIdScreen(
         userId = uiState.id,
         onUserIdChange = viewModel::updateId,
-        isValid = uiState.id.isNotEmpty(),
+        isValid = isButtonEnabled,
         onSignUpIdButtonClick = {
             val errorMessage = viewModel.validateId()
             if (errorMessage != null) {

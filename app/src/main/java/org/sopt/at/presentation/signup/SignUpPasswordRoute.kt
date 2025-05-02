@@ -12,6 +12,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,19 +50,23 @@ fun SignUpPasswordRoute(
     sharedViewModel.tempId = uiState.id
     sharedViewModel.tempPw = uiState.password
 
+    val isButtonEnabled by remember {
+        derivedStateOf { uiState.password.isNotEmpty() }
+    }
+
     SignUpPasswordScreen(
         userPassword = uiState.password,
         onPasswordChange = viewModel::updatePassword,
-        isValid = uiState.password.isNotEmpty(),
+        isValid = isButtonEnabled,
         onBackButtonClick = onBackButtonClick,
         paddingValues = paddingValues,
         onSignUpPasswordButtonClick = {
             val errorMessage = viewModel.validatePassword()
-            if (errorMessage != null){
+            if (errorMessage != null) {
                 scope.launch {
                     snackbarHostState.showSnackbar(errorMessage)
                 }
-            } else{
+            } else {
                 onSignUpPasswordButtonClickSuccess()
             }
         },

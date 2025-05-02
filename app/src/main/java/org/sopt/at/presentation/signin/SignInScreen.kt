@@ -17,8 +17,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,13 +58,17 @@ fun SignInRoute(
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState()}
 
+    val isButtonEnabled by remember {
+        derivedStateOf { uiState.id.isNotEmpty() && uiState.password.isNotEmpty() }
+    }
+
     SignInScreen(
         userId = uiState.id,
         userPassword = uiState.password,
         onIdChange = viewModel::updateId,
         onPasswordChange = viewModel::updatePassword,
         onBackButtonClick = onBackButtonClick,
-        isValid = (uiState.id.isNotEmpty() && uiState.password.isNotEmpty()),
+        isValid = isButtonEnabled,
         onSignInButtonClick = {
             val errorMessage =
                 viewModel.estimationError(registeredId = sharedViewModel.tempId, registeredPassword = sharedViewModel.tempPw)

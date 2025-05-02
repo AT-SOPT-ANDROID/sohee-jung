@@ -5,16 +5,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.toRoute
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.at.component.navigationbar.BottomNavigationBar
 import org.sopt.at.component.topbar.AtSoptMainTopBar
-import org.sopt.at.presentation.main.MainBottomTab
+import org.sopt.at.navigation.MainRoute
+import org.sopt.at.navigation.Route
 import org.sopt.at.presentation.home.navigation.homeNavGraph
 import org.sopt.at.presentation.live.navigation.liveNavGraph
-import org.sopt.at.presentation.main.navigation.MainNavigation
+import org.sopt.at.presentation.main.navigation.MainNavigator
 import org.sopt.at.presentation.main.navigation.rememberMainNavigator
+import org.sopt.at.presentation.my.navigation.My
 import org.sopt.at.presentation.my.navigation.myNavGraph
 import org.sopt.at.presentation.record.navigation.recordNavGraph
 import org.sopt.at.presentation.search.navigation.searchNavGraph
@@ -27,13 +34,21 @@ import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun MainScreen(
-    navigator: MainNavigation = rememberMainNavigator()
+    navigator: MainNavigator = rememberMainNavigator()
 ) {
-    val currentDestination = navigator.currentDestination
+    val currentBackStackEntry by navigator.navController.currentBackStackEntryAsState()
 
-    val showBars = when (currentDestination?.route) {
-        SignIn::class.qualifiedName,
-        SignUp::class.qualifiedName -> false
+    val currentTab by remember() {
+        derivedStateOf {
+            val route = currentBackStackEntry?.toRoute<MainRoute>()
+            MainBottomTab.entries.find { tab ->
+                tab.route == route
+            }
+        }
+    }
+
+    val showBars = when (currentBackStackEntry?.toRoute<Route>()) {
+        is SignIn, is SignUp, is My -> false
         else -> true
     }
 
@@ -59,7 +74,7 @@ fun MainScreen(
                         .background(TvingTheme.colors.BasicBlack)
                         .navigationBarsPadding(),
                     tabs = MainBottomTab.entries.toImmutableList(),
-                    currentTab = navigator.currentTab,
+                    currentTab = currentTab,
                     onTabSelected = { tab ->
                         navigator.navigate(tab)
                     }

@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import org.sopt.at.navigation.Route
 import org.sopt.at.presentation.signin.SignInRoute
-import org.sopt.at.presentation.signin.SignInScreen
 
 @Serializable
 data object SignIn : Route

@@ -17,8 +17,7 @@ fun NavController.navigateToShorts(navOptions: NavOptions) {
 }
 
 
-fun NavGraphBuilder.shortsNavGraph(paddingValues: PaddingValues
-) {
+fun NavGraphBuilder.shortsNavGraph(paddingValues: PaddingValues) {
     composable<Shorts> {
         ShortsScreen(paddingValues = paddingValues)
     }
