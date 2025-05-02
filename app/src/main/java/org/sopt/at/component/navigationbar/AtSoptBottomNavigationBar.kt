@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import org.sopt.at.navigation.MainBottomTab
+import org.sopt.at.presentation.main.MainBottomTab
 import org.sopt.at.ui.theme.BasicBlack
 import org.sopt.at.ui.theme.BasicWhite
 import org.sopt.at.ui.theme.Gray1

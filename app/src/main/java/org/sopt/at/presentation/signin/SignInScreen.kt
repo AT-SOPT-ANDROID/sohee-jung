@@ -110,16 +110,7 @@ fun SignInScreen(
     ) {
         AtSoptOnBoardingTopBar(onBackButtonClick = onBackButtonClick)
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = "TVING ID 로그인",
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
-            color = TvingTheme.colors.BasicWhite,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Title()
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -168,6 +159,20 @@ fun SignInScreen(
 
         SignInDescription()
     }
+}
+
+@Composable
+private fun Title(){
+    Spacer(modifier = Modifier.height(20.dp))
+
+    Text(
+        text = "TVING ID 로그인",
+        modifier = Modifier
+            .padding(horizontal = 20.dp),
+        color = TvingTheme.colors.BasicWhite,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold
+    )
 }
 
 @Composable

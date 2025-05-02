@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.at.component.navigationbar.BottomNavigationBar
 import org.sopt.at.component.topbar.AtSoptMainTopBar
-import org.sopt.at.navigation.MainBottomTab
+import org.sopt.at.presentation.main.MainBottomTab
 import org.sopt.at.presentation.home.navigation.homeNavGraph
 import org.sopt.at.presentation.live.navigation.liveNavGraph
 import org.sopt.at.presentation.main.navigation.MainNavigation
