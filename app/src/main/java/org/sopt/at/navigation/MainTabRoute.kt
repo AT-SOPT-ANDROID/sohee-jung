@@ -1,3 +1,3 @@
 package org.sopt.at.navigation
 
-interface Route
+interface MainRoute: Route

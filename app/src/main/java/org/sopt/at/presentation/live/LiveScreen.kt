@@ -9,11 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.at.ui.theme.TVINGTheme
+import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun LiveScreen(
@@ -23,14 +23,14 @@ fun LiveScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = Color.Black)
+            .background(color = TvingTheme.colors.BasicBlack)
             .padding(paddingValues)
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = "Live",
-            color = Color.White,
+            color = TvingTheme.colors.BasicWhite,
             fontSize = 40.sp
         )
     }
@@ -39,7 +39,7 @@ fun LiveScreen(
 @Preview(showBackground = true)
 @Composable
 private fun LiveScreenPreview() {
-    ATSOPTANDROIDTheme {
+    TVINGTheme {
         LiveScreen(
             paddingValues = PaddingValues(),
         )

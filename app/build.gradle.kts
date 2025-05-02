@@ -65,4 +65,7 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.kotlinx.serialization.json)
 
+    // Immutable
+    implementation(libs.kotlinx.collections.immutable)
+
 }

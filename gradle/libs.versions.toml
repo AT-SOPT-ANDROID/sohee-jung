@@ -13,6 +13,8 @@ composeBom = "2025.04.01"
 androidxComposeNavigation = "2.8.9"
 kotlinxSerializationJson = "1.8.1"
 
+kotlinxCollectionsImmutable = "0.3.8"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -32,6 +34,8 @@ androidx-material-icons-extended = { group = "androidx.compose.material", name =
 
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 
 
 [plugins]

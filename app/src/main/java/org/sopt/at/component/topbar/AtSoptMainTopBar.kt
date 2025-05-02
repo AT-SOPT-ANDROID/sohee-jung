@@ -9,71 +9,72 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.at.R
-import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import org.sopt.at.ui.theme.TvingLogo
+import org.sopt.at.ui.theme.TVINGTheme
+import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun AtSoptMainTopBar(
-    modifier: Modifier = Modifier,
-    shareTvIconClick: () -> Unit = {},
-    myIconClick: () -> Unit = {}
+    shareTvIconClick: () -> Unit,
+    myIconClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.Black)
+            .background(TvingTheme.colors.BasicBlack)
+            .statusBarsPadding()
             .padding(20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_tving_logo),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_tving_logo),
             contentDescription = "TVING logo",
             modifier = Modifier
                 .height(24.dp)
         )
 
-        Row(){
-            Icon(
-                painter = painterResource(id = R.drawable.ic_maintopbar_share),
-                contentDescription = "SearchIcon",
-                tint = Color.White,
-                modifier = Modifier
-                    .clickable {
-                        shareTvIconClick()
-                    }
-            )
+        Spacer(modifier = Modifier.weight(1f))
 
-            Spacer(modifier = Modifier.width(15.dp))
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_maintopbar_share),
+            contentDescription = "SearchIcon",
+            tint = TvingTheme.colors.BasicWhite,
+            modifier = Modifier
+                .clickable(onClick = shareTvIconClick)
+        )
 
-            Icon(
-                painter = painterResource(id = R.drawable.ic_my),
-                contentDescription = "myIcon",
-                tint = TvingLogo,
-                modifier = Modifier
-                    .clickable {
-                        myIconClick()
-                    }
-            )
-        }
+        Spacer(modifier = Modifier.width(15.dp))
 
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_my),
+            contentDescription = "myIcon",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .clickable(onClick = myIconClick)
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AtSoptMainTopBarPreview() {
-    ATSOPTANDROIDTheme {
-        AtSoptMainTopBar()
+    TVINGTheme {
+        AtSoptMainTopBar(
+            shareTvIconClick = {},
+            myIconClick = {}
+        )
     }
 }

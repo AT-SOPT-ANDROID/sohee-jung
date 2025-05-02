@@ -1,12 +1,12 @@
-package org.sopt.at.component.lazylist
+package org.sopt.at.presentation.home.component
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,21 +18,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.at.presentation.home.HomeContentsEntity
+import kotlinx.collections.immutable.ImmutableList
+import org.sopt.at.presentation.home.HomeContents
+import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun HomeBasicSection(
-    modifier: Modifier = Modifier,
     sectionTitle: String,
-    contents: List<HomeContentsEntity>,
+    contents: ImmutableList<HomeContents>,
     contentPaddingValues: PaddingValues,
     horizontalArrangement: Arrangement.Horizontal,
-    contentDescription: String = ""
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -48,49 +49,45 @@ fun HomeBasicSection(
         SectionLazyRow(
             contentPaddingValues = contentPaddingValues,
             horizontalArrangement = horizontalArrangement,
-            contentDescription = contentDescription,
-            contents = contents,
+            contents = contents
         )
-
     }
 }
 
 @Composable
-fun SectionTitleBar(
+private fun SectionTitleBar(
     title: String,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
 ) {
-    Row(modifier = modifier
-        .padding(contentPadding)) {
+    Row(modifier = modifier.padding(contentPadding)) {
         Text(
             text = title,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            color = TvingTheme.colors.BasicWhite,
+            fontSize = 18.sp,
+            style = TvingTheme.typography.title
         )
     }
 }
 
 @Composable
-fun SectionLazyRow(
+private fun SectionLazyRow(
     contentPaddingValues: PaddingValues,
     horizontalArrangement: Arrangement.Horizontal,
-    contentDescription: String = "",
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
-    contents: List<HomeContentsEntity>
+    contents: ImmutableList<HomeContents>,
+    modifier: Modifier = Modifier
 ) {
     LazyRow(
         contentPadding = contentPaddingValues,
         horizontalArrangement = horizontalArrangement,
         modifier = modifier
             .fillMaxWidth()
-            .height(180.dp)
+            .aspectRatio(3f / 4f)
     ) {
-        items(contents) { content ->
+        items(contents, key = { it.id }) { content ->
             Image(
                 painter = painterResource(id = content.image),
-                contentDescription = contentDescription,
+                contentDescription = content.contentDescription,
                 modifier = Modifier
                     .width(120.dp)
                     .height(160.dp)

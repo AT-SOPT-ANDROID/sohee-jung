@@ -6,48 +6,47 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.at.component.navigationbar.BottomNavigationBar
 import org.sopt.at.component.topbar.AtSoptMainTopBar
 import org.sopt.at.navigation.MainBottomTab
-import org.sopt.at.navigation.MainRoute
-import org.sopt.at.presentation.home.HomeScreen
-import org.sopt.at.presentation.home.navigation.HomeRoute
-import org.sopt.at.presentation.live.LiveScreen
-import org.sopt.at.presentation.live.navigation.LiveRoute
-import org.sopt.at.presentation.my.MyRoute
-import org.sopt.at.presentation.my.MyScreen
-import org.sopt.at.presentation.record.RecordScreen
-import org.sopt.at.presentation.record.navigation.RecordRoute
-import org.sopt.at.presentation.search.SearchScreen
-import org.sopt.at.presentation.search.navigation.SearchRoute
-import org.sopt.at.presentation.shorts.ShortsScreen
-import org.sopt.at.presentation.shorts.navigation.ShortsRoute
+import org.sopt.at.presentation.home.navigation.homeNavGraph
+import org.sopt.at.presentation.live.navigation.liveNavGraph
+import org.sopt.at.presentation.main.navigation.MainNavigation
+import org.sopt.at.presentation.main.navigation.rememberMainNavigator
+import org.sopt.at.presentation.my.navigation.myNavGraph
+import org.sopt.at.presentation.record.navigation.recordNavGraph
+import org.sopt.at.presentation.search.navigation.searchNavGraph
+import org.sopt.at.presentation.shorts.navigation.shortsNavGraph
+import org.sopt.at.presentation.signin.navigation.SignIn
+import org.sopt.at.presentation.signin.navigation.signInNavGraph
+import org.sopt.at.presentation.signup.navigation.SignUp
+import org.sopt.at.presentation.signup.navigation.signUpNavGraph
+import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier
+    navigator: MainNavigation = rememberMainNavigator()
 ) {
-    val navController = rememberNavController()
-    val currentBackStackEntry = navController.currentBackStackEntryAsState()
-    val currentDestination = currentBackStackEntry.value?.destination
+    val currentDestination = navigator.currentDestination
 
     val showBars = when (currentDestination?.route) {
-        MyRoute::class.qualifiedName -> false
+        SignIn::class.qualifiedName,
+        SignUp::class.qualifiedName -> false
         else -> true
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(TvingTheme.colors.BasicBlack),
         topBar = {
             if (showBars) {
                 AtSoptMainTopBar(
+                    shareTvIconClick = {},
                     myIconClick = {
-                        navController.navigate(MyRoute)
+                        navigator.navigateToMy()
                     }
                 )
 
@@ -57,53 +56,52 @@ fun MainScreen(
             if (showBars) {
                 BottomNavigationBar(
                     modifier = Modifier
-                        .background(Color.Black)
+                        .background(TvingTheme.colors.BasicBlack)
                         .navigationBarsPadding(),
-                    tabs = MainBottomTab.entries,
-                    currentTab = MainBottomTab.entries.find { tab ->
-                        tab.route == navController.currentBackStackEntry?.destination
-                    },
-                    onTabSelected = {
-                        navController.navigate(it.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                    tabs = MainBottomTab.entries.toImmutableList(),
+                    currentTab = navigator.currentTab,
+                    onTabSelected = { tab ->
+                        navigator.navigate(tab)
                     }
                 )
             }
         }
     ) { innerPadding ->
         NavHost(
-            navController = navController,
-            startDestination = HomeRoute
+            navController = navigator.navController,
+            startDestination = navigator.startDestination,
+            modifier = Modifier.background(TvingTheme.colors.BasicBlack)
         ) {
-            composable<HomeRoute> {
-                HomeScreen(paddingValues = innerPadding)
-            }
-            composable<ShortsRoute> {
-                ShortsScreen(paddingValues = innerPadding)
-            }
-            composable<LiveRoute> {
-                LiveScreen(paddingValues = innerPadding)
-            }
-            composable<SearchRoute> {
-                SearchScreen(paddingValues = innerPadding)
-            }
-            composable<RecordRoute> {
-                RecordScreen(paddingValues = innerPadding)
-            }
-            composable<MyRoute> {
-                MyScreen(
-                    onBackButtonClick = {
-                        navController.popBackStack()
-                    },
-                    userId = "dddddd",
-                    paddingValues = innerPadding
-                )
-            }
+            signInNavGraph(
+                paddingValues = innerPadding,
+                onBackButtonClick = {},
+                navigateToHome = navigator::navigateToHome,
+                navigateToSignUpId = navigator::navigateToSignUpId,
+            )
+            signUpNavGraph(
+                navigateToSignIn = navigator::navigateToSignIn
+            )
+            homeNavGraph(
+                paddingValues = innerPadding
+            )
+            shortsNavGraph(
+                paddingValues = innerPadding
+            )
+            liveNavGraph(
+                paddingValues = innerPadding
+            )
+            searchNavGraph(
+                paddingValues = innerPadding
+            )
+            recordNavGraph(
+                paddingValues = innerPadding
+            )
+            myNavGraph(
+                userId = "",
+                onBackButtonClick = {},
+                onLogoutButtonClick = navigator::navigateToSignIn,
+                paddingValues = innerPadding
+            )
         }
     }
 }

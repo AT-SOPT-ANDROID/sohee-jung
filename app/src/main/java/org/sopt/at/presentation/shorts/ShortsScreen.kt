@@ -9,11 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.at.ui.theme.TVINGTheme
+import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun ShortsScreen(
@@ -23,13 +23,13 @@ fun ShortsScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(TvingTheme.colors.BasicBlack)
             .padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Shorts",
-            color = Color.White,
+            color = TvingTheme.colors.BasicWhite,
             fontSize = 40.sp
         )
     }
@@ -38,7 +38,7 @@ fun ShortsScreen(
 @Preview(showBackground = true)
 @Composable
 private fun ShortsScreenPreview() {
-    ATSOPTANDROIDTheme {
+    TVINGTheme {
         ShortsScreen(
             paddingValues = PaddingValues(0.dp)
         )

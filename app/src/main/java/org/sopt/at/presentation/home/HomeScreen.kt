@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,30 +22,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.at.component.lazylist.HomeBasicSection
-import org.sopt.at.data.contents
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.collections.immutable.ImmutableList
+import org.sopt.at.presentation.home.component.HomeBasicSection
+import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = viewModel()
 ) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(TvingTheme.colors.BasicBlack)
             .padding(paddingValues)
     ) {
         item {
-            TopBanner(contents)
+            TopBanner(viewModel.contents)
         }
 
         item {
@@ -54,24 +57,18 @@ fun HomeScreen(
         }
 
         item {
-            Column(
+            Text(
+                text = "오늘의 티빙 TOP 20",
                 modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "오늘의 티빙 TOP 20",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                )
+                    .padding(horizontal = 16.dp),
+                color = TvingTheme.colors.BasicWhite,
+                fontSize = 18.sp,
+                style = TvingTheme.typography.title
+            )
 
-                Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
-                Ranking20(contents)
-
-            }
+            Ranking20(viewModel.contents)
         }
 
         item {
@@ -79,13 +76,13 @@ fun HomeScreen(
         }
 
         item {
-            OnBoarding(contents)
+            OnBoarding(viewModel.contents)
         }
     }
 }
 
 @Composable
-fun TopBanner(contents: List<HomeContentsEntity>) {
+private fun TopBanner(contents: ImmutableList<HomeContents>) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(18.dp),
@@ -94,7 +91,7 @@ fun TopBanner(contents: List<HomeContentsEntity>) {
             .height(450.dp)
             .padding(top = 20.dp)
     ) {
-        items(contents) { content ->
+        items(contents, key = { it.id }) { content ->
             Image(
                 painter = painterResource(id = content.image),
                 contentDescription = "Top Banner",
@@ -102,15 +99,13 @@ fun TopBanner(contents: List<HomeContentsEntity>) {
                 modifier = Modifier
                     .fillParentMaxWidth()
                     .clip(RoundedCornerShape(5.dp)),
-                )
+            )
         }
     }
 }
 
 @Composable
-fun Ranking20(
-    contents: List<HomeContentsEntity>
-) {
+private fun Ranking20(contents: ImmutableList<HomeContents>) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 40.dp),
         horizontalArrangement = Arrangement.spacedBy(40.dp),
@@ -118,7 +113,7 @@ fun Ranking20(
             .fillMaxWidth()
             .height(180.dp)
     ) {
-        itemsIndexed(contents) { index, content ->
+        itemsIndexed(contents, key = { index, content -> content.id }) { index, content ->
             Box(
                 modifier = Modifier
                     .width(120.dp)
@@ -129,7 +124,7 @@ fun Ranking20(
                     fontSize = 50.sp,
                     fontWeight = FontWeight.ExtraBold,
                     fontStyle = FontStyle.Italic,
-                    color = Color.White,
+                    color = TvingTheme.colors.BasicWhite,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                         .offset(x = (-30.dp))
@@ -149,13 +144,12 @@ fun Ranking20(
 }
 
 @Composable
-fun OnBoarding(contents: List<HomeContentsEntity>) {
+private fun OnBoarding(contents: ImmutableList<HomeContents>) {
     HomeBasicSection(
         sectionTitle = "지금 방영 중인 콘텐츠",
         contents = contents,
         contentPaddingValues = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        contentDescription = "지금 방영 중인 콘텐츠"
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     )
 }
 
