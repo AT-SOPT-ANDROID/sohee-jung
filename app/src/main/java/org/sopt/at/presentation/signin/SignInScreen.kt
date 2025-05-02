@@ -13,14 +13,17 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -31,60 +34,97 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import org.sopt.at.common.noRippleClickable
 import org.sopt.at.component.AtSoptPasswordTextField
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.textfield.AtSoptTextField
-import org.sopt.at.component.topbar.AtSoptBasicTopBar
-import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import org.sopt.at.ui.theme.GrayButton
-import org.sopt.at.ui.theme.GrayEdit
-import org.sopt.at.ui.theme.GrayExtraText
-import org.sopt.at.ui.theme.GrayText
-import org.sopt.at.ui.theme.RedButton
+import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
+import org.sopt.at.presentation.signup.SharedViewModel
+import org.sopt.at.ui.theme.TVINGTheme
+import org.sopt.at.ui.theme.TvingTheme
 
+@Composable
+fun SignInRoute(
+    onBackButtonClick: () -> Unit,
+    onSignInButtonClickSuccess: () -> Unit,
+    onSignUpButtonClick: () -> Unit,
+    paddingValues: PaddingValues,
+    viewModel: SignInViewModel = viewModel(),
+    sharedViewModel: SharedViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState()}
+
+    val isButtonEnabled by remember {
+        derivedStateOf { uiState.id.isNotEmpty() && uiState.password.isNotEmpty() }
+    }
+
+    SignInScreen(
+        userId = uiState.id,
+        userPassword = uiState.password,
+        onIdChange = viewModel::updateId,
+        onPasswordChange = viewModel::updatePassword,
+        onBackButtonClick = onBackButtonClick,
+        isValid = isButtonEnabled,
+        onSignInButtonClick = {
+            val errorMessage =
+                viewModel.estimationError(registeredId = sharedViewModel.tempId, registeredPassword = sharedViewModel.tempPw)
+            if (errorMessage != null) {
+                scope.launch {
+                    snackBarHostState.showSnackbar(errorMessage)
+                }
+            } else {
+                onSignInButtonClickSuccess()
+            }
+        },
+        onSignUpButtonClick = onSignUpButtonClick,
+        paddingValues = paddingValues,
+        isPasswordVisibility = uiState.passwordVisibility,
+        onTogglePasswordVisibility = {
+            viewModel.updatePasswordVisibility(!uiState.passwordVisibility)
+        }
+    )
+}
 
 @Composable
 fun SignInScreen(
+    userId: String,
+    userPassword: String,
+    onIdChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
     onBackButtonClick: () -> Unit,
-    paddingValues: PaddingValues,
+    isValid: Boolean,
     onSignInButtonClick: () -> Unit,
     onSignUpButtonClick: () -> Unit,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: SignInViewModel
+    isPasswordVisibility: Boolean = false,
+    onTogglePasswordVisibility: () -> Unit = {},
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
     Column(
         modifier = modifier
             .padding(paddingValues)
             .fillMaxSize()
             .padding(20.dp)
-            .background(color = Color.Black)
+            .background(color = TvingTheme.colors.BasicBlack)
             .imePadding()
     ) {
-        AtSoptBasicTopBar(onBackButtonClick = onBackButtonClick)
+        AtSoptOnBoardingTopBar(onBackButtonClick = onBackButtonClick)
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = "TVING ID 로그인",
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
-            color = Color.White,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Title()
 
         Spacer(modifier = Modifier.height(24.dp))
 
         AtSoptTextField(
-            value = uiState.id,
+            value = userId,
             placeholder = "아이디",
-            onValueChange = { viewModel.updateId(it) },
-            backgroundColor = GrayEdit,
-            backgroundFocusedColor = GrayEdit,
-            borderFocusedColor = Color.White,
+            onValueChange = onIdChange,
+            backgroundColor = TvingTheme.colors.Gray5,
+            backgroundFocusedColor = TvingTheme.colors.Gray5,
+            borderFocusedColor = TvingTheme.colors.BasicWhite,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
             )
@@ -93,11 +133,11 @@ fun SignInScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         AtSoptPasswordTextField(
-            value = uiState.password,
+            value = userPassword,
             placeholder = "비밀번호",
-            onPasswordChange = { viewModel.updatePassword(it) },
-            isPasswordVisibility = uiState.passwordVisibility,
-            onTogglePasswordVisibility = { viewModel.updatePasswordVisibility(!uiState.passwordVisibility) }
+            onPasswordChange = onPasswordChange,
+            isPasswordVisibility = isPasswordVisibility,
+            onTogglePasswordVisibility = onTogglePasswordVisibility
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -105,11 +145,11 @@ fun SignInScreen(
         AtSoptButton(
             text = "로그인하기",
             onClick = onSignInButtonClick,
-            textColor = GrayExtraText,
-            textConfirmColor = Color.White,
-            backgroundColor = GrayButton,
-            backgroundConfirmColor = RedButton,
-            isValid = uiState.id.isNotEmpty() && uiState.password.isNotEmpty()
+            textColor = TvingTheme.colors.Gray2,
+            textConfirmColor = TvingTheme.colors.BasicWhite,
+            backgroundColor = TvingTheme.colors.Gray4,
+            backgroundConfirmColor = TvingTheme.colors.BrandRed,
+            isValid = isValid
 
         )
 
@@ -125,9 +165,22 @@ fun SignInScreen(
     }
 }
 
+@Composable
+private fun Title(){
+    Spacer(modifier = Modifier.height(20.dp))
+
+    Text(
+        text = "TVING ID 로그인",
+        modifier = Modifier
+            .padding(horizontal = 20.dp),
+        color = TvingTheme.colors.BasicWhite,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold
+    )
+}
 
 @Composable
-fun SignInTextButton(
+private fun SignInTextButton(
     onSignUpButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -138,7 +191,7 @@ fun SignInTextButton(
     ) {
         Text(
             text = "아이디 찾기",
-            color = GrayText,
+            color = TvingTheme.colors.Gray1,
             modifier = Modifier.noRippleClickable {
                 // TODO
             }
@@ -156,7 +209,7 @@ fun SignInTextButton(
 
         Text(
             text = "비밀번호 찾기",
-            color = GrayText,
+            color = TvingTheme.colors.Gray1,
             modifier = Modifier.noRippleClickable {
                 // TODO
             }
@@ -174,7 +227,7 @@ fun SignInTextButton(
 
         Text(
             text = "회원가입",
-            color = GrayText,
+            color = TvingTheme.colors.Gray1,
             modifier = Modifier.noRippleClickable {
                 onSignUpButtonClick()
             }
@@ -184,7 +237,7 @@ fun SignInTextButton(
 }
 
 @Composable
-fun SignInDescription() {
+private fun SignInDescription() {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -210,7 +263,7 @@ fun SignInDescription() {
                 }
                 append("이 적용됩니다.")
             },
-            color = GrayExtraText,
+            color = TvingTheme.colors.Gray2,
             fontSize = 12.sp,
             textAlign = TextAlign.Center
         )
@@ -219,14 +272,18 @@ fun SignInDescription() {
 
 @Preview(showBackground = true)
 @Composable
-fun SignInScreenPreview() {
-    ATSOPTANDROIDTheme {
+private fun SignInScreenPreview() {
+    TVINGTheme {
         SignInScreen(
+            userId = "",
+            userPassword = "",
+            onIdChange = {},
+            onPasswordChange = {},
             onBackButtonClick = {},
+            isValid = false,
             paddingValues = PaddingValues(0.dp),
             onSignInButtonClick = {},
             onSignUpButtonClick = {},
-            viewModel = SignInViewModel()
         )
     }
 }
