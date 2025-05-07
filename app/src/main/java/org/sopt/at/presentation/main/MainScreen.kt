@@ -47,17 +47,6 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(TvingTheme.colors.BasicBlack),
-        topBar = {
-            if (showBars) {
-                AtSoptMainTopBar(
-                    shareTvIconClick = {},
-                    myIconClick = {
-                        navigator.navigateToMy()
-                    }
-                )
-
-            }
-        },
         bottomBar = {
             if (showBars) {
                 BottomNavigationBar(
@@ -88,6 +77,7 @@ fun MainScreen(
                 navigateToSignIn = navigator::navigateToSignIn
             )
             homeNavGraph(
+                navigateToMy = navigator::navigateToMy,
                 paddingValues = innerPadding
             )
             shortsNavGraph(

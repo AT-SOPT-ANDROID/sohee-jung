@@ -35,12 +35,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.ImmutableList
+import org.sopt.at.component.topbar.AtSoptMainTopBar
 import org.sopt.at.presentation.home.component.HomeBasicSection
 import org.sopt.at.ui.theme.TvingTheme
 import kotlin.math.absoluteValue
 
 @Composable
 fun HomeScreen(
+    navigateToMy: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel()
@@ -51,6 +53,13 @@ fun HomeScreen(
             .background(TvingTheme.colors.BasicBlack)
             .padding(paddingValues)
     ) {
+        item{
+            AtSoptMainTopBar(
+                shareTvIconClick = {},
+                myIconClick = navigateToMy
+            )
+        }
+
         item {
             TopBanner(
                 viewModel.contents,
@@ -171,6 +180,7 @@ private fun OnBoarding(contents: ImmutableList<HomeContents>) {
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen(
+        navigateToMy = {},
         paddingValues = PaddingValues(0.dp)
     )
 }
