@@ -36,18 +36,9 @@ import org.sopt.at.ui.theme.TvingTheme
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator()
 ) {
-    val currentBackStackEntry by navigator.navController.currentBackStackEntryAsState()
+    val currentDestination = navigator.currentDestination
 
-    val currentTab by remember() {
-        derivedStateOf {
-            val route = currentBackStackEntry?.toRoute<MainRoute>()
-            MainBottomTab.entries.find { tab ->
-                tab.route == route
-            }
-        }
-    }
-
-    val showBars = when (currentBackStackEntry?.toRoute<Route>()) {
+    val showBars = when (currentDestination?.route)  {
         is SignIn, is SignUp, is My -> false
         else -> true
     }
@@ -74,7 +65,7 @@ fun MainScreen(
                         .background(TvingTheme.colors.BasicBlack)
                         .navigationBarsPadding(),
                     tabs = MainBottomTab.entries.toImmutableList(),
-                    currentTab = currentTab,
+                    currentTab = navigator.currentTab,
                     onTabSelected = { tab ->
                         navigator.navigate(tab)
                     }

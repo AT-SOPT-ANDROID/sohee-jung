@@ -14,14 +14,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -29,10 +32,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.ImmutableList
 import org.sopt.at.presentation.home.component.HomeBasicSection
 import org.sopt.at.ui.theme.TvingTheme
+import kotlin.math.absoluteValue
 
 @Composable
 fun HomeScreen(
@@ -47,7 +52,12 @@ fun HomeScreen(
             .padding(paddingValues)
     ) {
         item {
-            TopBanner(viewModel.contents)
+            TopBanner(
+                viewModel.contents,
+                modifier = Modifier
+                    .height(450.dp)
+                    .padding(20.dp)
+            )
         }
 
         item {
@@ -80,23 +90,28 @@ fun HomeScreen(
 }
 
 @Composable
-private fun TopBanner(contents: ImmutableList<HomeContents>) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(18.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(450.dp)
-            .padding(top = 20.dp)
-    ) {
-        items(contents, key = { it.id }) { content ->
+private fun TopBanner(
+    contents: ImmutableList<HomeContents>,
+    modifier: Modifier
+) {
+    val pagerState = rememberPagerState(pageCount = { contents.size })
+
+    HorizontalPager(state = pagerState) { page ->
+        Card(
+            modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    val pageOffset = (
+                            pagerState.currentPage - page + pagerState.currentPageOffsetFraction
+                            ).absoluteValue
+                    alpha = lerp(0.7f, 1f, 1f - pageOffset.coerceIn(0f, 1f))
+                }
+        ) {
             Image(
-                painter = painterResource(id = content.image),
-                contentDescription = "Top Banner",
+                painter = painterResource(contents[page].image),
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillParentMaxWidth()
-                    .clip(RoundedCornerShape(5.dp)),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
             )
         }
     }

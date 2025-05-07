@@ -114,7 +114,7 @@ fun SignInScreen(
     ) {
         AtSoptOnBoardingTopBar(onBackButtonClick = onBackButtonClick)
 
-        Title()
+        TitleSection()
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -166,7 +166,7 @@ fun SignInScreen(
 }
 
 @Composable
-private fun Title(){
+private fun TitleSection(){
     Spacer(modifier = Modifier.height(20.dp))
 
     Text(
