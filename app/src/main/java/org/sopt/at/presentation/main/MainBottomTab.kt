@@ -1,8 +1,9 @@
-package org.sopt.at.navigation
+package org.sopt.at.presentation.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import org.sopt.at.R
+import org.sopt.at.navigation.MainRoute
 import org.sopt.at.presentation.home.navigation.Home
 import org.sopt.at.presentation.live.navigation.Live
 import org.sopt.at.presentation.record.navigation.Record

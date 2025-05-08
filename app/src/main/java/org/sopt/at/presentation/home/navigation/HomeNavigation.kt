@@ -16,9 +16,13 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
     navigate(Home, navOptions)
 }
 
-fun NavGraphBuilder.homeNavGraph(paddingValues: PaddingValues) {
+fun NavGraphBuilder.homeNavGraph(
+    navigateToMy: () -> Unit,
+    paddingValues: PaddingValues
+) {
     composable<Home> {
         HomeScreen(
+            navigateToMy = navigateToMy,
             paddingValues = paddingValues
         )
     }

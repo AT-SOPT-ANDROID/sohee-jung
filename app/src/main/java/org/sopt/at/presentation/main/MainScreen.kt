@@ -9,12 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.at.component.navigationbar.BottomNavigationBar
-import org.sopt.at.component.topbar.AtSoptMainTopBar
-import org.sopt.at.navigation.MainBottomTab
 import org.sopt.at.presentation.home.navigation.homeNavGraph
 import org.sopt.at.presentation.live.navigation.liveNavGraph
-import org.sopt.at.presentation.main.navigation.MainNavigation
+import org.sopt.at.presentation.main.navigation.MainNavigator
 import org.sopt.at.presentation.main.navigation.rememberMainNavigator
+import org.sopt.at.presentation.my.navigation.My
 import org.sopt.at.presentation.my.navigation.myNavGraph
 import org.sopt.at.presentation.record.navigation.recordNavGraph
 import org.sopt.at.presentation.search.navigation.searchNavGraph
@@ -27,13 +26,12 @@ import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun MainScreen(
-    navigator: MainNavigation = rememberMainNavigator()
+    navigator: MainNavigator = rememberMainNavigator()
 ) {
     val currentDestination = navigator.currentDestination
 
     val showBars = when (currentDestination?.route) {
-        SignIn::class.qualifiedName,
-        SignUp::class.qualifiedName -> false
+        is SignIn, is SignUp, is My -> false
         else -> true
     }
 
@@ -41,17 +39,6 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(TvingTheme.colors.BasicBlack),
-        topBar = {
-            if (showBars) {
-                AtSoptMainTopBar(
-                    shareTvIconClick = {},
-                    myIconClick = {
-                        navigator.navigateToMy()
-                    }
-                )
-
-            }
-        },
         bottomBar = {
             if (showBars) {
                 BottomNavigationBar(
@@ -70,8 +57,11 @@ fun MainScreen(
         NavHost(
             navController = navigator.navController,
             startDestination = navigator.startDestination,
-            modifier = Modifier.background(TvingTheme.colors.BasicBlack)
+            modifier = Modifier
+                .background(TvingTheme.colors.BasicBlack)
         ) {
+            val navController = navigator.navController
+
             signInNavGraph(
                 paddingValues = innerPadding,
                 onBackButtonClick = {},
@@ -82,6 +72,7 @@ fun MainScreen(
                 navigateToSignIn = navigator::navigateToSignIn
             )
             homeNavGraph(
+                navigateToMy = navigator::navigateToMy,
                 paddingValues = innerPadding
             )
             shortsNavGraph(
@@ -98,7 +89,7 @@ fun MainScreen(
             )
             myNavGraph(
                 userId = "",
-                onBackButtonClick = {},
+                onBackButtonClick = { navController.popBackStack() },
                 onLogoutButtonClick = navigator::navigateToSignIn,
                 paddingValues = innerPadding
             )

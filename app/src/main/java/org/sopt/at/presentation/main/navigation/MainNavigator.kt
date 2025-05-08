@@ -3,26 +3,26 @@ package org.sopt.at.presentation.main.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import org.sopt.at.navigation.MainBottomTab
 import org.sopt.at.presentation.home.navigation.Home
 import org.sopt.at.presentation.home.navigation.navigateToHome
 import org.sopt.at.presentation.live.navigation.navigateToLive
+import org.sopt.at.presentation.main.MainBottomTab
 import org.sopt.at.presentation.my.navigation.navigateToMy
 import org.sopt.at.presentation.record.navigation.navigateToRecord
 import org.sopt.at.presentation.search.navigation.navigateToSearch
 import org.sopt.at.presentation.shorts.navigation.navigateToShorts
-import org.sopt.at.presentation.signin.navigation.SignIn
 import org.sopt.at.presentation.signin.navigation.navigateToSignIn
 import org.sopt.at.presentation.signup.navigation.navigateToSignUp
 
-class MainNavigation(
+class MainNavigator(
     val navController: NavHostController
 ) {
-    val startDestination = SignIn
+    val startDestination = Home
 
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -35,8 +35,8 @@ class MainNavigation(
 
     fun navigate(tab: MainBottomTab) {
         val navOptions = navOptions {
-            popUpTo(tab.route) {
-                inclusive = false
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
             }
             launchSingleTop = true
             restoreState = true
@@ -71,6 +71,6 @@ class MainNavigation(
 @Composable
 fun rememberMainNavigator(
     navController: NavHostController = rememberNavController()
-): MainNavigation = remember(navController) {
-    MainNavigation(navController)
+): MainNavigator = remember(navController) {
+    MainNavigator(navController)
 }
