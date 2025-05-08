@@ -6,11 +6,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
-import org.sopt.at.navigation.MainRoute
+import org.sopt.at.navigation.Route
 import org.sopt.at.presentation.my.MyScreen
 
 @Serializable
-data object My : MainRoute
+data object My : Route
 
 fun NavController.navigateToMy(navOptions: NavOptions? = null) {
     navigate(My, navOptions)
