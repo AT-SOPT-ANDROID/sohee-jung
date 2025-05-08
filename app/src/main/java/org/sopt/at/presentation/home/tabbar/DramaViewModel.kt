@@ -1,10 +1,11 @@
-package org.sopt.at.presentation.home
+package org.sopt.at.presentation.home.tabbar
 
 import androidx.lifecycle.ViewModel
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.at.R
+import org.sopt.at.presentation.home.HomeContents
 
-class HomeViewModel: ViewModel() {
+class DramaViewModel: ViewModel() {
 
     val contents = persistentListOf(
         HomeContents(
