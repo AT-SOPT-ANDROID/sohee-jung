@@ -29,7 +29,7 @@ fun MyScreen(
             .padding(paddingValues)
             .fillMaxSize()
             .background(color = TvingTheme.colors.BasicBlack)
-            .padding(20.dp)
+            .padding(horizontal = 20.dp)
             .imePadding()
     ) {
         AtSoptOnBoardingTopBar(onBackButtonClick = onBackButtonClick)

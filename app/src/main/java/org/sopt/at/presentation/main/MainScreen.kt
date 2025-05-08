@@ -30,7 +30,7 @@ fun MainScreen(
 ) {
     val currentDestination = navigator.currentDestination
 
-    val showBars = when (currentDestination?.route)  {
+    val showBars = when (currentDestination?.route) {
         is SignIn, is SignUp, is My -> false
         else -> true
     }
@@ -57,8 +57,11 @@ fun MainScreen(
         NavHost(
             navController = navigator.navController,
             startDestination = navigator.startDestination,
-            modifier = Modifier.background(TvingTheme.colors.BasicBlack)
+            modifier = Modifier
+                .background(TvingTheme.colors.BasicBlack)
         ) {
+            val navController = navigator.navController
+
             signInNavGraph(
                 paddingValues = innerPadding,
                 onBackButtonClick = {},
@@ -86,7 +89,7 @@ fun MainScreen(
             )
             myNavGraph(
                 userId = "",
-                onBackButtonClick = {},
+                onBackButtonClick = { navController.popBackStack() },
                 onLogoutButtonClick = navigator::navigateToSignIn,
                 paddingValues = innerPadding
             )
