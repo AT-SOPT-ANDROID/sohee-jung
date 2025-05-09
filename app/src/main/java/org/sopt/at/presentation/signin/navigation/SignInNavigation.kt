@@ -1,6 +1,7 @@
 package org.sopt.at.presentation.signin.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.SnackbarHostState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -20,14 +21,16 @@ fun NavGraphBuilder.signInNavGraph(
     paddingValues: PaddingValues,
     onBackButtonClick: () -> Unit,
     navigateToHome: () -> Unit,
-    navigateToSignUpId: () -> Unit
+    navigateToSignUpId: () -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
     composable<SignIn> {
         SignInRoute(
             onBackButtonClick = onBackButtonClick,
             paddingValues = paddingValues,
             onSignInButtonClickSuccess = navigateToHome,
-            onSignUpButtonClick = navigateToSignUpId
+            onSignUpButtonClick = navigateToSignUpId,
+            snackbarHostState = snackbarHostState
         )
     }
 }

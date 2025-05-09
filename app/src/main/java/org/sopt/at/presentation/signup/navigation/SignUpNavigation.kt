@@ -8,9 +8,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import org.sopt.at.navigation.Route
-import org.sopt.at.presentation.signup.SharedViewModel
 import org.sopt.at.presentation.signup.SignUpId
 import org.sopt.at.presentation.signup.SignUpIdRoute
+import org.sopt.at.presentation.signup.SignUpNickName
+import org.sopt.at.presentation.signup.SignUpNickNameRoute
 import org.sopt.at.presentation.signup.SignUpPassword
 import org.sopt.at.presentation.signup.SignUpPasswordRoute
 import org.sopt.at.presentation.signup.SignUpScreen
@@ -37,7 +38,6 @@ fun NavGraphBuilder.signUpGraph(
     paddingValues: PaddingValues,
     navController: NavController,
     viewModel: SignUpViewModel,
-    sharedViewModel: SharedViewModel,
     snackbarHostState: SnackbarHostState,
     navigateToSignIn: () -> Unit
 ) {
@@ -55,12 +55,23 @@ fun NavGraphBuilder.signUpGraph(
 
     composable<SignUpPassword> {
         SignUpPasswordRoute(
-            onSignUpPasswordButtonClickSuccess = navigateToSignIn,
+            onSignUpPasswordButtonClickSuccess = {
+                navController.navigate(SignUpNickName)
+            },
             onBackButtonClick = {},
             viewModel = viewModel,
-            sharedViewModel = sharedViewModel,
             snackbarHostState = snackbarHostState,
             paddingValues = paddingValues
+        )
+    }
+
+    composable<SignUpNickName> {
+        SignUpNickNameRoute(
+            onNicknameButtonClickSuccess = navigateToSignIn,
+            viewModel = viewModel,
+            paddingValues = paddingValues,
+            snackbarHostState = snackbarHostState,
+            onBackButtonClick = {}
         )
     }
 }

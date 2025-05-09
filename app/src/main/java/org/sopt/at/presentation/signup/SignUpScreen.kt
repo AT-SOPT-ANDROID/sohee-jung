@@ -13,9 +13,7 @@ import org.sopt.at.presentation.signup.navigation.signUpGraph
 @Composable
 fun SignUpScreen(
     navigateToSignIn: () -> Unit,
-    viewModel: SignUpViewModel = viewModel(),
-    sharedViewModel: SharedViewModel = viewModel()
-
+    viewModel: SignUpViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -31,7 +29,6 @@ fun SignUpScreen(
                 paddingValues = innerPadding,
                 navController = navController,
                 viewModel = viewModel,
-                sharedViewModel = sharedViewModel,
                 snackbarHostState = snackbarHostState,
                 navigateToSignIn = navigateToSignIn
             )

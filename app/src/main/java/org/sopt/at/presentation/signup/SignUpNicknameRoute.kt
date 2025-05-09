@@ -1,10 +1,11 @@
 package org.sopt.at.presentation.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,39 +28,39 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.sopt.at.presentation.signup.component.ValidationResult
-import org.sopt.at.component.AtSoptPasswordTextField
 import org.sopt.at.component.button.AtSoptButton
+import org.sopt.at.component.textfield.AtSoptTextField
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
 import org.sopt.at.navigation.Route
-import org.sopt.at.ui.theme.TVINGTheme
+import org.sopt.at.ui.theme.Gray4
 import org.sopt.at.ui.theme.TvingTheme
 
 @Serializable
-data object SignUpPassword : Route
+data object SignUpNickName : Route
 
 @Composable
-fun SignUpPasswordRoute(
-    onSignUpPasswordButtonClickSuccess: () -> Unit,
-    onBackButtonClick: () -> Unit,
+fun SignUpNickNameRoute(
+    onNicknameButtonClickSuccess: () -> Unit,
     viewModel: SignUpViewModel,
+    paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState,
-    paddingValues: PaddingValues
+    onBackButtonClick: () -> Unit
 ) {
+    val context = LocalContext.current
+
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
     val isButtonEnabled by remember {
-        derivedStateOf { uiState.password.isNotEmpty() }
+        derivedStateOf { uiState.nickname.isNotEmpty() }
     }
 
-    SignUpPasswordScreen(
-        userPassword = uiState.password,
-        onPasswordChange = viewModel::updatePassword,
+    SignUpNickNameScreen(
+        nickname = uiState.nickname,
+        onNicknameChange = viewModel::updateNickname,
         isValid = isButtonEnabled,
-        onBackButtonClick = onBackButtonClick,
-        paddingValues = paddingValues,
-        onSignUpPasswordButtonClick = {
-            val result = viewModel.validatePassword()
+        onNicknameButtonClick = {
+            val result = viewModel.validateNickname()
 
             when (result) {
                 is ValidationResult.Error -> {
@@ -69,33 +71,34 @@ fun SignUpPasswordRoute(
                 }
 
                 is ValidationResult.Success -> {
-                    onSignUpPasswordButtonClickSuccess()
+                    viewModel.signUp(
+                        onSuccess = onNicknameButtonClickSuccess,
+                        onFailure = {message ->
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 }
             }
         },
-        isPasswordVisibility = uiState.passwordVisibility,
-        onTogglePasswordVisibility = {
-            viewModel.updatePasswordVisibility(!uiState.passwordVisibility)
-        }
+        onBackButtonClick = onBackButtonClick,
+        paddingValues = paddingValues
     )
 }
 
 @Composable
-fun SignUpPasswordScreen(
-    userPassword: String,
-    onPasswordChange: (String) -> Unit,
-    isValid: Boolean,
+fun SignUpNickNameScreen(
+    nickname: String,
+    onNicknameChange: (String) -> Unit,
+    onNicknameButtonClick: () -> Unit,
     onBackButtonClick: () -> Unit,
     paddingValues: PaddingValues,
-    onSignUpPasswordButtonClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    isPasswordVisibility: Boolean = false,
-    onTogglePasswordVisibility: () -> Unit = {},
+    isValid: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .padding(paddingValues)
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(TvingTheme.colors.BasicBlack)
             .padding(20.dp)
             .imePadding()
@@ -105,7 +108,7 @@ fun SignUpPasswordScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "비밀번호를 입력해주세요",
+            text = "닉네임을 입력해주세요.",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
             color = TvingTheme.colors.BasicWhite,
@@ -115,18 +118,19 @@ fun SignUpPasswordScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        AtSoptPasswordTextField(
-            value = userPassword,
-            placeholder = "비밀번호",
-            onPasswordChange = onPasswordChange,
-            isPasswordVisibility = isPasswordVisibility,
-            onTogglePasswordVisibility = onTogglePasswordVisibility
+        AtSoptTextField(
+            value = nickname,
+            placeholder = "닉네임",
+            onValueChange = onNicknameChange,
+            backgroundColor = TvingTheme.colors.Gray4,
+            backgroundFocusedColor = Gray4,
+            borderFocusedColor = TvingTheme.colors.BasicWhite
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "영문, 숫자, 특수문자(~!@#\$%^&*) 조합 8~15자리",
+            text = "한글, 영어, 숫자 조합 1~20자리",
             color = TvingTheme.colors.Gray2,
             fontSize = 12.sp
         )
@@ -135,7 +139,7 @@ fun SignUpPasswordScreen(
 
         AtSoptButton(
             text = "다음",
-            onClick = onSignUpPasswordButtonClick,
+            onClick = onNicknameButtonClick,
             textColor = TvingTheme.colors.BasicWhite,
             textConfirmColor = TvingTheme.colors.BasicBlack,
             backgroundColor = Color.Transparent,
@@ -149,17 +153,13 @@ fun SignUpPasswordScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun SignUpPasswordPreview() {
-    TVINGTheme {
-        SignUpPasswordScreen(
-            onBackButtonClick = {},
-            paddingValues = PaddingValues(),
-            onSignUpPasswordButtonClick = {},
-            userPassword = "",
-            onPasswordChange = {},
-            isValid = true,
-            isPasswordVisibility = false,
-            onTogglePasswordVisibility = {}
-        )
-    }
+private fun SignUpNickNamePreview() {
+    SignUpNickNameScreen(
+        nickname = "",
+        onNicknameChange = {},
+        onBackButtonClick = {},
+        onNicknameButtonClick = {},
+        paddingValues = PaddingValues(),
+        isValid = false
+    )
 }

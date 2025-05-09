@@ -50,7 +50,6 @@ fun CustomTab(
             0 -> DramaScreen(
                 dramaViewModel = dramaViewModel
             )
-
             1 -> EntertainmentScreen()
             2 -> MovieScreen()
             3 -> SportsScreen()

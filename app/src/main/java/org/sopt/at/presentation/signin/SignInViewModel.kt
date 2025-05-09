@@ -1,15 +1,47 @@
 package org.sopt.at.presentation.signin
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.sopt.at.data.request.SignInRequestDto
+import org.sopt.at.local.datastore.UserLocalDataStore
+import org.sopt.at.repository.AuthRepository
 
-class SignInViewModel : ViewModel() {
+class SignInViewModel(
+    private val userLocalDataStore: UserLocalDataStore
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SignInState> = MutableStateFlow(SignInState())
     val uiState: StateFlow<SignInState> = _uiState.asStateFlow()
+
+    private val authRepository = AuthRepository()
+
+    fun signIn(
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val signInRequest = SignInRequestDto(
+                loginId = uiState.value.id,
+                password = uiState.value.password
+            )
+
+            val signInResult = authRepository.signIn(signInRequest)
+
+            if (signInResult.isSuccess) {
+                val userId = signInResult.getOrNull()?.userId ?: -1
+                userLocalDataStore.saveUserId(userId)
+                onSuccess()
+            } else {
+                onFailure(signInResult.exceptionOrNull()?.message ?: "회원가입에 실패하였습니다.")
+            }
+
+        }
+    }
 
     fun updateId(value: String) {
         _uiState.update {
@@ -32,18 +64,6 @@ class SignInViewModel : ViewModel() {
             it.copy(
                 passwordVisibility = value
             )
-        }
-    }
-
-    fun estimationError(registeredId: String, registeredPassword: String): String? {
-        val inputId = _uiState.value.id
-        val inputPassword = _uiState.value.password
-
-        return when {
-            inputId != registeredId && inputPassword == registeredPassword -> "아이디가 틀렸습니다."
-            inputId == registeredId && inputPassword != registeredPassword -> "비밀번호가 틀렸습니다."
-            inputId != registeredId && inputPassword != registeredPassword -> "아이디, 비밀번호가 모두 틀렸습니다."
-            else -> null
         }
     }
 }

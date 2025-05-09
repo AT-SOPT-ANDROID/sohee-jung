@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toImmutableList
@@ -13,14 +16,11 @@ import org.sopt.at.presentation.home.navigation.homeNavGraph
 import org.sopt.at.presentation.live.navigation.liveNavGraph
 import org.sopt.at.presentation.main.navigation.MainNavigator
 import org.sopt.at.presentation.main.navigation.rememberMainNavigator
-import org.sopt.at.presentation.my.navigation.My
 import org.sopt.at.presentation.my.navigation.myNavGraph
 import org.sopt.at.presentation.record.navigation.recordNavGraph
 import org.sopt.at.presentation.search.navigation.searchNavGraph
 import org.sopt.at.presentation.shorts.navigation.shortsNavGraph
-import org.sopt.at.presentation.signin.navigation.SignIn
 import org.sopt.at.presentation.signin.navigation.signInNavGraph
-import org.sopt.at.presentation.signup.navigation.SignUp
 import org.sopt.at.presentation.signup.navigation.signUpNavGraph
 import org.sopt.at.ui.theme.TvingTheme
 
@@ -28,19 +28,15 @@ import org.sopt.at.ui.theme.TvingTheme
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator()
 ) {
-    val currentDestination = navigator.currentDestination
-
-    val showBars = when (currentDestination?.route) {
-        is SignIn, is SignUp, is My -> false
-        else -> true
-    }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(TvingTheme.colors.BasicBlack),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         bottomBar = {
-            if (showBars) {
+            if (navigator.showBottomNavBar()) {
                 BottomNavigationBar(
                     modifier = Modifier
                         .background(TvingTheme.colors.BasicBlack)
@@ -67,6 +63,7 @@ fun MainScreen(
                 onBackButtonClick = {},
                 navigateToHome = navigator::navigateToHome,
                 navigateToSignUpId = navigator::navigateToSignUpId,
+                snackbarHostState = snackbarHostState
             )
             signUpNavGraph(
                 navigateToSignIn = navigator::navigateToSignIn
@@ -88,7 +85,6 @@ fun MainScreen(
                 paddingValues = innerPadding
             )
             myNavGraph(
-                userId = "",
                 onBackButtonClick = { navController.popBackStack() },
                 onLogoutButtonClick = navigator::navigateToSignIn,
                 paddingValues = innerPadding

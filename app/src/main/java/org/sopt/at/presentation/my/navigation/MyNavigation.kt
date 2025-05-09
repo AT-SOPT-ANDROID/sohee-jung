@@ -17,14 +17,12 @@ fun NavController.navigateToMy(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.myNavGraph(
-    userId: String,
     onLogoutButtonClick: () -> Unit,
     onBackButtonClick: () -> Unit,
     paddingValues: PaddingValues,
 ) {
     composable<My> {
         MyScreen(
-            userId = userId,
             onBackButtonClick = onBackButtonClick,
             onLogoutButtonClick = onLogoutButtonClick,
             paddingValues = paddingValues,

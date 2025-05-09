@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.sopt.at.presentation.signup.component.ValidationResult
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.textfield.AtSoptTextField
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
@@ -56,13 +57,19 @@ fun SignUpIdRoute(
         onUserIdChange = viewModel::updateId,
         isValid = isButtonEnabled,
         onSignUpIdButtonClick = {
-            val errorMessage = viewModel.validateId()
-            if (errorMessage != null) {
-                scope.launch {
-                    snackbarHostState.showSnackbar(errorMessage)
+            val result = viewModel.validateId()
+
+            when (result) {
+                is ValidationResult.Error -> {
+                    val errorMessage = result.message
+                    scope.launch {
+                        snackbarHostState.showSnackbar(errorMessage)
+                    }
                 }
-            } else {
-                onSignUpIdButtonClickSuccess()
+
+                is ValidationResult.Success -> {
+                    onSignUpIdButtonClickSuccess()
+                }
             }
         },
         onBackButtonClick = onBackButtonClick,
