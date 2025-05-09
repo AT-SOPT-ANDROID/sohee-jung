@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.at.component.navigationbar.BottomNavigationBar
+import org.sopt.at.navigation.MainRoute
 import org.sopt.at.presentation.home.navigation.homeNavGraph
 import org.sopt.at.presentation.live.navigation.liveNavGraph
 import org.sopt.at.presentation.main.navigation.MainNavigator
@@ -30,17 +31,12 @@ fun MainScreen(
 ) {
     val currentDestination = navigator.currentDestination
 
-    val showBars = when (currentDestination?.route) {
-        is SignIn, is SignUp, is My -> false
-        else -> true
-    }
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(TvingTheme.colors.BasicBlack),
         bottomBar = {
-            if (showBars) {
+            if (navigator.showBottomNavBar()) {
                 BottomNavigationBar(
                     modifier = Modifier
                         .background(TvingTheme.colors.BasicBlack)

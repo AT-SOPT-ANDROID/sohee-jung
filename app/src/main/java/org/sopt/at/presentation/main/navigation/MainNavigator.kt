@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import org.sopt.at.presentation.home.navigation.Home
 import org.sopt.at.presentation.home.navigation.navigateToHome
 import org.sopt.at.presentation.live.navigation.navigateToLive
 import org.sopt.at.presentation.main.MainBottomTab
@@ -16,13 +15,14 @@ import org.sopt.at.presentation.my.navigation.navigateToMy
 import org.sopt.at.presentation.record.navigation.navigateToRecord
 import org.sopt.at.presentation.search.navigation.navigateToSearch
 import org.sopt.at.presentation.shorts.navigation.navigateToShorts
+import org.sopt.at.presentation.signin.navigation.SignIn
 import org.sopt.at.presentation.signin.navigation.navigateToSignIn
 import org.sopt.at.presentation.signup.navigation.navigateToSignUp
 
 class MainNavigator(
     val navController: NavHostController
 ) {
-    val startDestination = Home
+    val startDestination = SignIn
 
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -65,6 +65,14 @@ class MainNavigator(
 
     fun navigateToHome() {
         navController.navigateToHome()
+    }
+
+    @Composable
+    fun showBottomNavBar(): Boolean {
+        val currentRoute = currentDestination?.route ?: return false
+        return MainBottomTab.entries.any { tab ->
+            currentRoute == tab.route::class.qualifiedName
+        }
     }
 }
 

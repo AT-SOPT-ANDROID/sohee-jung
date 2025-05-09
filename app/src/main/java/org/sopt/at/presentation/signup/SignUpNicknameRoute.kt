@@ -1,5 +1,6 @@
 package org.sopt.at.presentation.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,6 +46,7 @@ fun SignUpNickNameRoute(
     snackbarHostState: SnackbarHostState,
     onBackButtonClick: () -> Unit
 ) {
+    val context = LocalContext.current
 
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
@@ -68,7 +71,12 @@ fun SignUpNickNameRoute(
                 }
 
                 is ValidationResult.Success -> {
-                    onNicknameButtonClickSuccess()
+                    viewModel.signUp(
+                        onSuccess = onNicknameButtonClickSuccess,
+                        onFailure = {message ->
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 }
             }
         },

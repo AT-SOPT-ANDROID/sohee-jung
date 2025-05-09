@@ -41,15 +41,11 @@ fun SignUpPasswordRoute(
     onSignUpPasswordButtonClickSuccess: () -> Unit,
     onBackButtonClick: () -> Unit,
     viewModel: SignUpViewModel,
-    sharedViewModel: SharedViewModel,
     snackbarHostState: SnackbarHostState,
     paddingValues: PaddingValues
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
-
-    sharedViewModel.tempId = uiState.id
-    sharedViewModel.tempPw = uiState.password
 
     val isButtonEnabled by remember {
         derivedStateOf { uiState.password.isNotEmpty() }

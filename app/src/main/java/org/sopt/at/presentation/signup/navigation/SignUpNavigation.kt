@@ -8,7 +8,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import org.sopt.at.navigation.Route
-import org.sopt.at.presentation.signup.SharedViewModel
 import org.sopt.at.presentation.signup.SignUpId
 import org.sopt.at.presentation.signup.SignUpIdRoute
 import org.sopt.at.presentation.signup.SignUpNickName
@@ -39,7 +38,6 @@ fun NavGraphBuilder.signUpGraph(
     paddingValues: PaddingValues,
     navController: NavController,
     viewModel: SignUpViewModel,
-    sharedViewModel: SharedViewModel,
     snackbarHostState: SnackbarHostState,
     navigateToSignIn: () -> Unit
 ) {
@@ -62,7 +60,6 @@ fun NavGraphBuilder.signUpGraph(
             },
             onBackButtonClick = {},
             viewModel = viewModel,
-            sharedViewModel = sharedViewModel,
             snackbarHostState = snackbarHostState,
             paddingValues = paddingValues
         )

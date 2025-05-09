@@ -5,13 +5,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.sopt.at.navigation.MainRoute
 import org.sopt.at.presentation.record.RecordScreen
 
 @Serializable
-@SerialName("Record")
 data object Record : MainRoute
 
 fun NavController.navigateToRecord(navOptions: NavOptions) {

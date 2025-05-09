@@ -41,7 +41,6 @@ import org.sopt.at.component.AtSoptPasswordTextField
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.textfield.AtSoptTextField
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
-import org.sopt.at.presentation.signup.SharedViewModel
 import org.sopt.at.ui.theme.TVINGTheme
 import org.sopt.at.ui.theme.TvingTheme
 
@@ -51,8 +50,7 @@ fun SignInRoute(
     onSignInButtonClickSuccess: () -> Unit,
     onSignUpButtonClick: () -> Unit,
     paddingValues: PaddingValues,
-    viewModel: SignInViewModel = viewModel(),
-    sharedViewModel: SharedViewModel = viewModel()
+    viewModel: SignInViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
@@ -70,15 +68,15 @@ fun SignInRoute(
         onBackButtonClick = onBackButtonClick,
         isValid = isButtonEnabled,
         onSignInButtonClick = {
-            val errorMessage =
-                viewModel.estimationError(registeredId = sharedViewModel.tempId, registeredPassword = sharedViewModel.tempPw)
-            if (errorMessage != null) {
-                scope.launch {
-                    snackBarHostState.showSnackbar(errorMessage)
-                }
-            } else {
-                onSignInButtonClickSuccess()
-            }
+//            val errorMessage =
+//                viewModel.estimationError(registeredId = sharedViewModel.tempId, registeredPassword = sharedViewModel.tempPw)
+//            if (errorMessage != null) {
+//                scope.launch {
+//                    snackBarHostState.showSnackbar(errorMessage)
+//                }
+//            } else {
+//                onSignInButtonClickSuccess()
+//            }
         },
         onSignUpButtonClick = onSignUpButtonClick,
         paddingValues = paddingValues,

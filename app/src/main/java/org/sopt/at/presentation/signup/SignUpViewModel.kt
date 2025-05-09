@@ -1,15 +1,46 @@
 package org.sopt.at.presentation.signup
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.sopt.at.common.ValidationResult
+import org.sopt.at.data.request.SignUpRequestDto
+import org.sopt.at.repository.AuthRepository
 
 class SignUpViewModel : ViewModel() {
     private val _uiState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
     val uiState: StateFlow<SignUpState> = _uiState.asStateFlow()
+
+    private val authRepository = AuthRepository()
+
+    fun signUp(
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val signUpRequest = SignUpRequestDto(
+                loginId = uiState.value.id,
+                password = uiState.value.password,
+                nickname = uiState.value.nickname
+            )
+
+            val signUpResult = authRepository.signUp(signUpRequest)
+            Log.d("SignUpResult", "결과: $signUpResult")
+
+            if (signUpResult.isSuccess) {
+                Log.i("SignUp", "회원가입 성공")
+                onSuccess()
+            } else {
+                onFailure(signUpResult.exceptionOrNull()?.message ?: "회원가입에 실패하였습니다.")
+            }
+        }
+    }
 
     fun updateId(value: String) {
         _uiState.update {
@@ -42,15 +73,6 @@ class SignUpViewModel : ViewModel() {
             )
         }
     }
-
-//    fun validateId(): String? {
-//        return validateId(_uiState.value.id)
-//    }
-
-//    fun validatePassword(): String? {
-//        return validatePassword(_uiState.value.password)
-//    }
-
 
     fun validateId(): ValidationResult {
         val id = _uiState.value.id
