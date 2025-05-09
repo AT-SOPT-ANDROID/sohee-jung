@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.sopt.at.common.ValidationResult
 import org.sopt.at.component.AtSoptPasswordTextField
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
@@ -61,13 +62,19 @@ fun SignUpPasswordRoute(
         onBackButtonClick = onBackButtonClick,
         paddingValues = paddingValues,
         onSignUpPasswordButtonClick = {
-            val errorMessage = viewModel.validatePassword()
-            if (errorMessage != null) {
-                scope.launch {
-                    snackbarHostState.showSnackbar(errorMessage)
+            val result = viewModel.validatePassword()
+
+            when (result) {
+                is ValidationResult.Error -> {
+                    val errorMessage = result.message
+                    scope.launch {
+                        snackbarHostState.showSnackbar(errorMessage)
+                    }
                 }
-            } else {
-                onSignUpPasswordButtonClickSuccess()
+
+                is ValidationResult.Success -> {
+                    onSignUpPasswordButtonClickSuccess()
+                }
             }
         },
         isPasswordVisibility = uiState.passwordVisibility,

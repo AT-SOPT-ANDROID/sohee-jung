@@ -31,33 +31,33 @@ import org.sopt.at.component.textfield.AtSoptTextField
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
 import org.sopt.at.navigation.Route
 import org.sopt.at.ui.theme.Gray4
-import org.sopt.at.ui.theme.TVINGTheme
 import org.sopt.at.ui.theme.TvingTheme
 
 @Serializable
-data object SignUpId : Route
+data object SignUpNickName : Route
 
 @Composable
-fun SignUpIdRoute(
-    onSignUpIdButtonClickSuccess: () -> Unit,
-    onBackButtonClick: () -> Unit,
+fun SignUpNickNameRoute(
+    onNicknameButtonClickSuccess: () -> Unit,
     viewModel: SignUpViewModel,
+    paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState,
-    paddingValues: PaddingValues
+    onBackButtonClick: () -> Unit
 ) {
+
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
     val isButtonEnabled by remember {
-        derivedStateOf { uiState.id.isNotEmpty() }
+        derivedStateOf { uiState.nickname.isNotEmpty() }
     }
 
-    SignUpIdScreen(
-        userId = uiState.id,
-        onUserIdChange = viewModel::updateId,
+    SignUpNickNameScreen(
+        nickname = uiState.nickname,
+        onNicknameChange = viewModel::updateNickname,
         isValid = isButtonEnabled,
-        onSignUpIdButtonClick = {
-            val result = viewModel.validateId()
+        onNicknameButtonClick = {
+            val result = viewModel.validateNickname()
 
             when (result) {
                 is ValidationResult.Error -> {
@@ -68,24 +68,23 @@ fun SignUpIdRoute(
                 }
 
                 is ValidationResult.Success -> {
-                    onSignUpIdButtonClickSuccess()
+                    onNicknameButtonClickSuccess()
                 }
             }
         },
         onBackButtonClick = onBackButtonClick,
         paddingValues = paddingValues
     )
-
 }
 
 @Composable
-fun SignUpIdScreen(
-    userId: String,
-    onUserIdChange: (String) -> Unit,
-    isValid: Boolean,
-    onSignUpIdButtonClick: () -> Unit,
+fun SignUpNickNameScreen(
+    nickname: String,
+    onNicknameChange: (String) -> Unit,
+    onNicknameButtonClick: () -> Unit,
     onBackButtonClick: () -> Unit,
     paddingValues: PaddingValues,
+    isValid: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -101,7 +100,7 @@ fun SignUpIdScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "아이디를 입력해주세요.",
+            text = "닉네임을 입력해주세요.",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
             color = TvingTheme.colors.BasicWhite,
@@ -112,9 +111,9 @@ fun SignUpIdScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         AtSoptTextField(
-            value = userId,
-            onValueChange = onUserIdChange,
-            placeholder = "아이디",
+            value = nickname,
+            placeholder = "닉네임",
+            onValueChange = onNicknameChange,
             backgroundColor = TvingTheme.colors.Gray4,
             backgroundFocusedColor = Gray4,
             borderFocusedColor = TvingTheme.colors.BasicWhite
@@ -123,16 +122,16 @@ fun SignUpIdScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "영문 소문자 또는 영문 대문자, 숫자 조합 6~12자리",
+            text = "한글, 영어, 숫자 조합 1~20자리",
             color = TvingTheme.colors.Gray2,
             fontSize = 12.sp
         )
 
-        Spacer(modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
 
         AtSoptButton(
             text = "다음",
-            onClick = onSignUpIdButtonClick,
+            onClick = onNicknameButtonClick,
             textColor = TvingTheme.colors.BasicWhite,
             textConfirmColor = TvingTheme.colors.BasicBlack,
             backgroundColor = Color.Transparent,
@@ -146,15 +145,13 @@ fun SignUpIdScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun SignupIdPreview() {
-    TVINGTheme {
-        SignUpIdScreen(
-            userId = "",
-            onUserIdChange = {},
-            isValid = false,
-            onSignUpIdButtonClick = {},
-            onBackButtonClick = {},
-            paddingValues = PaddingValues()
-        )
-    }
+private fun SignUpNickNamePreview() {
+    SignUpNickNameScreen(
+        nickname = "",
+        onNicknameChange = {},
+        onBackButtonClick = {},
+        onNicknameButtonClick = {},
+        paddingValues = PaddingValues(),
+        isValid = false
+    )
 }
