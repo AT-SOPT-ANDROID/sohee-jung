@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toImmutableList
@@ -25,10 +28,13 @@ import org.sopt.at.ui.theme.TvingTheme
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator()
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(TvingTheme.colors.BasicBlack),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         bottomBar = {
             if (navigator.showBottomNavBar()) {
                 BottomNavigationBar(
@@ -57,6 +63,7 @@ fun MainScreen(
                 onBackButtonClick = {},
                 navigateToHome = navigator::navigateToHome,
                 navigateToSignUpId = navigator::navigateToSignUpId,
+                snackbarHostState = snackbarHostState
             )
             signUpNavGraph(
                 navigateToSignIn = navigator::navigateToSignIn

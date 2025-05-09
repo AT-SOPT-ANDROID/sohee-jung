@@ -51,6 +51,7 @@ fun SignInRoute(
     onSignInButtonClickSuccess: () -> Unit,
     onSignUpButtonClick: () -> Unit,
     paddingValues: PaddingValues,
+    snackbarHostState: SnackbarHostState
 ) {
     val context = LocalContext.current
     val viewModel = remember {
@@ -58,7 +59,6 @@ fun SignInRoute(
     }
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
 
     val isButtonEnabled by remember {
         derivedStateOf { uiState.id.isNotEmpty() && uiState.password.isNotEmpty() }
@@ -76,7 +76,7 @@ fun SignInRoute(
                 onSuccess = onSignInButtonClickSuccess,
                 onFailure = { message ->
                     scope.launch {
-                        snackBarHostState.showSnackbar(message)
+                        snackbarHostState.showSnackbar(message)
                     }
                 })
         },
