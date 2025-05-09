@@ -1,10 +1,9 @@
-package org.sopt.at.di
+package org.sopt.at.data
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import org.sopt.at.BuildConfig
-import org.sopt.at.data.api.auth.AuthService
 import retrofit2.Retrofit
 
 object RetrofitInstance {
@@ -13,7 +12,7 @@ object RetrofitInstance {
     val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(Json.Default.asConverterFactory("application/json".toMediaType()))
             .build()
     }
 

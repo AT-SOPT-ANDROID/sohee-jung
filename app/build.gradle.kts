@@ -80,4 +80,8 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.okhttp.logging)
+
+    // DataStore
+    implementation(libs.datastore.preferences)
+    implementation(libs.datastore.core)
 }

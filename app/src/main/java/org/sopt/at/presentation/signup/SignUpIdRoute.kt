@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.sopt.at.common.ValidationResult
+import org.sopt.at.presentation.signup.component.ValidationResult
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.textfield.AtSoptTextField
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar

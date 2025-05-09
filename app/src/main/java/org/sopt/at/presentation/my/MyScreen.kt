@@ -10,20 +10,33 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
+import org.sopt.at.local.datastore.UserLocalDataStore
 import org.sopt.at.ui.theme.TvingTheme
 
 @Composable
 fun MyScreen(
-    userId: String,
     onLogoutButtonClick: () -> Unit,
     onBackButtonClick: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
+
+    val context = LocalContext.current
+    val viewModel = remember { MyViewModel(UserLocalDataStore(context)) }
+    val nickNameState = viewModel.nickname.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getMyNickname()
+    }
+
     Column(
         modifier = modifier
             .padding(paddingValues)
@@ -37,7 +50,7 @@ fun MyScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "이메일 $userId",
+            text = "닉네임 ${nickNameState.value.nickName}",
             modifier = Modifier
                 .padding(10.dp),
             color = TvingTheme.colors.BasicWhite

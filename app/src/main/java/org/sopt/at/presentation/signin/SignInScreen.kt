@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -34,13 +35,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import org.sopt.at.common.noRippleClickable
 import org.sopt.at.component.AtSoptPasswordTextField
 import org.sopt.at.component.button.AtSoptButton
 import org.sopt.at.component.textfield.AtSoptTextField
 import org.sopt.at.component.topbar.AtSoptOnBoardingTopBar
+import org.sopt.at.local.datastore.UserLocalDataStore
 import org.sopt.at.ui.theme.TVINGTheme
 import org.sopt.at.ui.theme.TvingTheme
 
@@ -50,11 +51,14 @@ fun SignInRoute(
     onSignInButtonClickSuccess: () -> Unit,
     onSignUpButtonClick: () -> Unit,
     paddingValues: PaddingValues,
-    viewModel: SignInViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    val viewModel = remember {
+        SignInViewModel(UserLocalDataStore(context))
+    }
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState()}
+    val snackBarHostState = remember { SnackbarHostState() }
 
     val isButtonEnabled by remember {
         derivedStateOf { uiState.id.isNotEmpty() && uiState.password.isNotEmpty() }
@@ -68,15 +72,13 @@ fun SignInRoute(
         onBackButtonClick = onBackButtonClick,
         isValid = isButtonEnabled,
         onSignInButtonClick = {
-//            val errorMessage =
-//                viewModel.estimationError(registeredId = sharedViewModel.tempId, registeredPassword = sharedViewModel.tempPw)
-//            if (errorMessage != null) {
-//                scope.launch {
-//                    snackBarHostState.showSnackbar(errorMessage)
-//                }
-//            } else {
-//                onSignInButtonClickSuccess()
-//            }
+            viewModel.signIn(
+                onSuccess = onSignInButtonClickSuccess,
+                onFailure = { message ->
+                    scope.launch {
+                        snackBarHostState.showSnackbar(message)
+                    }
+                })
         },
         onSignUpButtonClick = onSignUpButtonClick,
         paddingValues = paddingValues,
@@ -164,7 +166,7 @@ fun SignInScreen(
 }
 
 @Composable
-private fun TitleSection(){
+private fun TitleSection() {
     Spacer(modifier = Modifier.height(20.dp))
 
     Text(

@@ -1,4 +1,4 @@
-package org.sopt.at.common
+package org.sopt.at.presentation.signup.component
 
 sealed class ValidationResult {
     object Success : ValidationResult()

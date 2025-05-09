@@ -9,19 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.at.component.navigationbar.BottomNavigationBar
-import org.sopt.at.navigation.MainRoute
 import org.sopt.at.presentation.home.navigation.homeNavGraph
 import org.sopt.at.presentation.live.navigation.liveNavGraph
 import org.sopt.at.presentation.main.navigation.MainNavigator
 import org.sopt.at.presentation.main.navigation.rememberMainNavigator
-import org.sopt.at.presentation.my.navigation.My
 import org.sopt.at.presentation.my.navigation.myNavGraph
 import org.sopt.at.presentation.record.navigation.recordNavGraph
 import org.sopt.at.presentation.search.navigation.searchNavGraph
 import org.sopt.at.presentation.shorts.navigation.shortsNavGraph
-import org.sopt.at.presentation.signin.navigation.SignIn
 import org.sopt.at.presentation.signin.navigation.signInNavGraph
-import org.sopt.at.presentation.signup.navigation.SignUp
 import org.sopt.at.presentation.signup.navigation.signUpNavGraph
 import org.sopt.at.ui.theme.TvingTheme
 
@@ -29,8 +25,6 @@ import org.sopt.at.ui.theme.TvingTheme
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator()
 ) {
-    val currentDestination = navigator.currentDestination
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -84,7 +78,6 @@ fun MainScreen(
                 paddingValues = innerPadding
             )
             myNavGraph(
-                userId = "",
                 onBackButtonClick = { navController.popBackStack() },
                 onLogoutButtonClick = navigator::navigateToSignIn,
                 paddingValues = innerPadding
